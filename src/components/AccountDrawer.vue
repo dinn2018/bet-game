@@ -35,7 +35,7 @@ export default class AccountDrawer extends Vue {
   private async registerAccount() {
     try {
       const register = connex.vendor.sign("cert");
-      let result = await register.request({
+      const result = await register.request({
         purpose: "identification",
         payload: {
           type: "text",
@@ -43,7 +43,7 @@ export default class AccountDrawer extends Vue {
         }
       });
       console.log("registerAccount", result);
-      let acc = {
+      const acc = {
         address: result.annex.signer,
         createdTime: result.annex.timestamp,
         level: AccountLevel.Main
@@ -56,9 +56,9 @@ export default class AccountDrawer extends Vue {
   }
 
   private async commitAccount(acc: Account) {
-    let main = await DB.getMainAccount();
+    const main = await DB.getMainAccount();
     await DB.setMainAccount(acc);
-    let accs = await DB.accounts.toArray();
+    const accs = await DB.accounts.toArray();
     await this.$store.commit("setMain", acc);
     await this.$store.commit("put", accs);
     if (main.address != acc.address) {

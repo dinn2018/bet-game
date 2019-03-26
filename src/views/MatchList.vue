@@ -57,7 +57,7 @@ export default class MatchList extends Vue {
     try {
       await this.loadMatchViews();
       GlobalEvent.$on(Events.TickerStart, async () => {
-        if (this.page == 0) {
+        if (this.page === 0) {
           console.log("MatchCard on TickerStart");
           await this.reloadMatchViews();
         }
@@ -86,17 +86,17 @@ export default class MatchList extends Vue {
   }
 
   private async getMatchViews() {
-    let matches: Array<MatchView> = [];
+    const matches: Array<MatchView> = [];
     try {
-      let res = await this.$http.get(
+      const res = await this.$http.get(
         HttpHost +
           "/api/quizs?page=" +
           this.page +
           "&pagesize=" +
           this.page_size
       );
-      let data = await res.json();
-      for (let m of data) {
+      const data = await res.json();
+      for (const m of data) {
         matches.push({
           id: new BigNumber(m._id),
           oneLogo: HttpHost + m.leftLogo,

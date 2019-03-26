@@ -68,8 +68,8 @@ import BigNumber from "bignumber.js";
 import { Match, MatchSeedIds } from "@/models/Match";
 import DB, { Account, AccountLevel, ZeroAddress } from "@/database";
 import { Vue, Component, Prop, Watch } from "vue-property-decorator";
-import { contractAddr, MethodABI, unit, zero } from "@/config";
 import { GlobalEvent, Events } from "@/GlobalEvent";
+import { contractAddr, MethodABI, unit, zero } from "@/config";
 
 @Component
 export default class BetDialog extends Vue {
@@ -86,9 +86,9 @@ export default class BetDialog extends Vue {
     this.show = val;
   }
   @Watch("betSeedId") async onBetSeedIdChanged(seedId: number) {
-    if (seedId == MatchSeedIds.one) {
+    if (seedId === MatchSeedIds.one) {
       this.yourBet = this.oneBet;
-    } else if (seedId == MatchSeedIds.two) {
+    } else if (seedId === MatchSeedIds.two) {
       this.yourBet = this.twoBet;
     }
   }
@@ -105,9 +105,9 @@ export default class BetDialog extends Vue {
   ];
 
   private get seedName() {
-    if (this.betSeedId == MatchSeedIds.one) {
+    if (this.betSeedId === MatchSeedIds.one) {
       return this.match.oneSeedName;
-    } else if (this.betSeedId == MatchSeedIds.two) {
+    } else if (this.betSeedId === MatchSeedIds.two) {
       return this.match.twoSeedName;
     }
   }
@@ -121,9 +121,9 @@ export default class BetDialog extends Vue {
   }
 
   private get totalValue() {
-    if (this.betSeedId == MatchSeedIds.one) {
+    if (this.betSeedId === MatchSeedIds.one) {
       return this.match.oneSeedBonusPool;
-    } else if (this.betSeedId == MatchSeedIds.two) {
+    } else if (this.betSeedId === MatchSeedIds.two) {
       return this.match.twoSeedBonusPool;
     }
     return 0;
@@ -131,12 +131,12 @@ export default class BetDialog extends Vue {
 
   private async ok() {
     try {
-      let acc = await DB.getMainAccount();
-      if (acc.address == ZeroAddress) {
+      const acc = await DB.getMainAccount();
+      if (acc.address === ZeroAddress) {
         alert("Register an account first!");
         return;
       }
-      let betForSeed = new BigNumber(this.bet);
+      const betForSeed = new BigNumber(this.bet);
       if (!betForSeed.isGreaterThanOrEqualTo(100)) {
         alert("You must bet 100 vet at least!");
         return;
@@ -146,7 +146,7 @@ export default class BetDialog extends Vue {
       const clause = betMethod
         .value(betForSeed.multipliedBy(unit).toString(10))
         .asClause(this.match.id, this.betSeedId);
-      let result = await betTx.request([
+      const result = await betTx.request([
         {
           comment:
             "You will bet " + this.bet + " vet for " + this.seedName + " !",
@@ -171,7 +171,7 @@ export default class BetDialog extends Vue {
 
   private async commitAccount(acc: Account) {
     await DB.setMainAccount(acc);
-    let accs = await DB.accounts.toArray();
+    const accs = await DB.accounts.toArray();
     await this.$store.commit("put", accs);
     await this.$store.commit("setMain", acc);
   }

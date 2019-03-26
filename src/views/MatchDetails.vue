@@ -169,7 +169,7 @@ import {
   MethodTopics,
   EventABI,
   HttpHost
-} from "../config";
+} from "@/config";
 
 @Component({
   components: { BetDialog, BetRecordCard }
@@ -241,9 +241,9 @@ export default class MatchDetails extends Vue {
   }
 
   private async getBetRecords() {
-    let matchIdTopic =
+    const matchIdTopic =
       "0x" + new BigNumber(this.matchId).toString(16).padStart(64, "0");
-    let events = await connex.thor
+    const events = await connex.thor
       .filter("event")
       .criteria([
         {
@@ -259,15 +259,15 @@ export default class MatchDetails extends Vue {
       ])
       .order("desc")
       .apply(this.offset, this.limit);
-    let joinEvent = new abi.Event(EventABI.joinBet as any);
-    let withdrawBetEvent = new abi.Event(EventABI.withdrawBet as any);
-    let brs = [];
-    for (let event of events) {
-      let meta = event.meta as any;
+    const joinEvent = new abi.Event(EventABI.joinBet as any);
+    const withdrawBetEvent = new abi.Event(EventABI.withdrawBet as any);
+    const brs = [];
+    for (const event of events) {
+      const meta = event.meta as any;
       if (event.topics[0] == MethodTopics.joinBet) {
-        let decoded = joinEvent.decode(event.data, event.topics) as any;
-        let seedId = decoded.combatant;
-        let seedName = this.match.seedNameById(seedId);
+        const decoded = joinEvent.decode(event.data, event.topics) as any;
+        const seedId = decoded.combatant;
+        const seedName = this.match.seedNameById(seedId);
         brs.push(
           new BetRecord(
             decoded._id,
@@ -279,9 +279,12 @@ export default class MatchDetails extends Vue {
           )
         );
       } else {
-        let decoded = withdrawBetEvent.decode(event.data, event.topics) as any;
-        let seedId = decoded.combatant;
-        let seedName = this.match.seedNameById(seedId);
+        const decoded = withdrawBetEvent.decode(
+          event.data,
+          event.topics
+        ) as any;
+        const seedId = decoded.combatant;
+        const seedName = this.match.seedNameById(seedId);
         brs.push(
           new BetRecord(
             decoded._id,
@@ -325,9 +328,9 @@ export default class MatchDetails extends Vue {
     const getmatchMethod = connex.thor
       .account(contractAddr)
       .method(MethodABI.getMatch);
-    let output = await getmatchMethod.call(new BigNumber(this.matchId));
-    let decoded = output.decoded as any;
-    let match = new Match(
+    const output = await getmatchMethod.call(new BigNumber(this.matchId));
+    const decoded = output.decoded as any;
+    const match = new Match(
       new BigNumber(decoded.id),
       decoded.gameName,
       parseFloat(decoded.startTime),
@@ -340,9 +343,8 @@ export default class MatchDetails extends Vue {
       new BigNumber(decoded.rightBet)
     );
     try {
-      let res = await this.$http.get(HttpHost + "/api/quiz/" + this.matchId);
-      let data = await res.json();
-
+      const res = await this.$http.get(HttpHost + "/api/quiz/" + this.matchId);
+      const data = await res.json();
       match.view = {
         id: new BigNumber(decoded.id),
         oneLogo: HttpHost + data.leftLogo,
@@ -362,15 +364,15 @@ export default class MatchDetails extends Vue {
   }
 
   private async getBet(matchId: BigNumber, seedId: number) {
-    let acc = await DB.getMainAccount();
-    if (acc.address == ZeroAddress) {
+    const acc = await DB.getMainAccount();
+    if (acc.address === ZeroAddress) {
       return zero;
     }
     const getBetMethod = connex.thor
       .account(contractAddr)
       .method(MethodABI.getBet);
-    let output = await getBetMethod.caller(acc.address).call(matchId, seedId);
-    let decoded = output.decoded as any;
+    const output = await getBetMethod.caller(acc.address).call(matchId, seedId);
+    const decoded = output.decoded as any;
     return new BigNumber(decoded["0"]);
   }
 }

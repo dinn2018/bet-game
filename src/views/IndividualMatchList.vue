@@ -124,7 +124,7 @@ import {
   MethodABI,
   HttpHost,
   zero
-} from "../config";
+} from "@/config";
 
 @Component({
   components: {
@@ -226,13 +226,13 @@ export default class IndividualMatchList extends Vue {
   }
 
   private async getMatchViews(status: number) {
-    let main = await DB.getMainAccount();
-    if (main.address == ZeroAddress) {
+    const main = await DB.getMainAccount();
+    if (main.address === ZeroAddress) {
       return [];
     }
-    let matchViews: Array<MatchView> = [];
+    const matchViews: Array<MatchView> = [];
     try {
-      let res = await this.$http.get(
+      const res = await this.$http.get(
         HttpHost +
           "/api/player?page=" +
           this.page +
@@ -242,9 +242,9 @@ export default class IndividualMatchList extends Vue {
           main.address +
           (status == 0 ? "" : "&stage=" + status)
       );
-      let data = await res.json();
-      for (let m of data) {
-        let match = m.quiz;
+      const data = await res.json();
+      for (const m of data) {
+        const match = m.quiz;
         matchViews.push({
           id: new BigNumber(match._id),
           oneLogo: HttpHost + match.leftLogo,

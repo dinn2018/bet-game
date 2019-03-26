@@ -53,15 +53,15 @@
             <v-layout row>
               <v-flex xs1 sm1 align-self-center>
                 <v-icon
-                  v-show="match.status == 1 || match.status == 2"
+                  v-show="match.status === 1 || match.status === 2"
                   style="display: flex;align-items:center;justify-content: center;font-size: 10px;"
                 >far fa-clock</v-icon>
                 <v-icon
-                  v-show="match.status == 3"
+                  v-show="match.status === 3"
                   style="display: flex;align-items:center;justify-content: center;font-size: 10px;"
                 >fas fa-ban</v-icon>
                 <v-icon
-                  v-show="match.status == 4"
+                  v-show="match.status === 4"
                   style="display: flex;align-items:center;justify-content: center;font-size: 10px;"
                 >fas fa-power-off</v-icon>
               </v-flex>
@@ -125,8 +125,8 @@ export default class MatchCard extends Vue {
     const getmatchMethod = connex.thor
       .account(contractAddr)
       .method(MethodABI.getMatch);
-    let output = await getmatchMethod.call(this.matchView.id);
-    let decoded = output.decoded as any;
+    const output = await getmatchMethod.call(this.matchView.id);
+    const decoded = output.decoded as any;
     return new Match(
       new BigNumber(decoded.id),
       decoded.gameName,

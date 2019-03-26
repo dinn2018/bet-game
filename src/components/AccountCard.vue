@@ -4,7 +4,7 @@
     <div class="account_address">{{account.address}}</div>
     <v-icon class="account_balance_icon" style="font-size:15px">fas fa-dollar-sign</v-icon>
     <div class="account_balance">{{balance}} vet</div>
-    <v-icon v-show="account.level == 0" class="account_main_icon">fas fa-check</v-icon>
+    <v-icon v-show="account.level === 0" class="account_main_icon">fas fa-check</v-icon>
   </v-card>
 </template>
 
@@ -22,9 +22,9 @@ export default class AccountCard extends Vue {
   balance: string = "0";
 
   private async selected() {
-    let main = await DB.getMainAccount();
+    const main = await DB.getMainAccount();
     await DB.setMainAccount(this.account);
-    let accs = await DB.accounts.toArray();
+    const accs = await DB.accounts.toArray();
     await this.$store.commit("put", accs);
     await this.$store.commit("setMain", this.account);
     if (main.address != this.account.address) {
@@ -33,8 +33,8 @@ export default class AccountCard extends Vue {
   }
 
   private async getbalance(addr: string) {
-    let a = await connex.thor.account(addr).get();
-    let balance = new BigNumber(a.balance).div(unit).toString(10);
+    const a = await connex.thor.account(addr).get();
+    const balance = new BigNumber(a.balance).div(unit).toString(10);
     return balance.split(".")[0];
   }
 

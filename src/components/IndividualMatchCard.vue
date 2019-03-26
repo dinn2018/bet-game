@@ -146,8 +146,8 @@ export default class IndividualMatchCard extends Vue {
     const getmatchMethod = connex.thor
       .account(contractAddr)
       .method(MethodABI.getMatch);
-    let output = await getmatchMethod.call(id);
-    let decoded = output.decoded as any;
+    const output = await getmatchMethod.call(id);
+    const decoded = output.decoded as any;
     return new Match(
       new BigNumber(decoded.id),
       decoded.gameName,
@@ -171,15 +171,15 @@ export default class IndividualMatchCard extends Vue {
   }
 
   private async getBet(matchId: BigNumber, seedId: number) {
-    let acc = await DB.getMainAccount();
-    if (acc.address == ZeroAddress) {
+    const acc = await DB.getMainAccount();
+    if (acc.address === ZeroAddress) {
       return zero;
     }
     const getBetMethod = connex.thor
       .account(contractAddr)
       .method(MethodABI.getBet);
-    let output = await getBetMethod.caller(acc.address).call(matchId, seedId);
-    let decoded = output.decoded as any;
+    const output = await getBetMethod.caller(acc.address).call(matchId, seedId);
+    const decoded = output.decoded as any;
     return new BigNumber(decoded["0"]);
   }
 

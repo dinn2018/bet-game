@@ -51,7 +51,7 @@ export default class App extends Vue {
 
   get mainAccount() {
     let addr = this.$store.state.mainAccount.address;
-    if (addr == "") {
+    if (addr === "") {
       return "";
     }
     return addr.substr(0, 8) + "...." + addr.substr(36, 6);
