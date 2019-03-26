@@ -10,14 +10,14 @@
 
 <script lang="ts">
 import { unit } from "../config";
-import DB, { Entities } from "../database";
+import DB, { Account } from "../database";
 import { Vue, Component, Prop } from "vue-property-decorator";
 import BigNumber from "bignumber.js";
 import { GlobalEvent, Events } from "../GlobalEvent";
 
 @Component
 export default class AccountCard extends Vue {
-  @Prop() account!: Entities.Account;
+  @Prop() account!: Account;
 
   balance: string = "0 vet";
 

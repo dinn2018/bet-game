@@ -19,7 +19,7 @@
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
 import AccountCard from "./AccountCard.vue";
-import DB, { Entities, AccountLevel } from "../database";
+import DB, { Account, AccountLevel } from "../database";
 import { GlobalEvent, Events } from "../GlobalEvent";
 
 @Component({
@@ -55,7 +55,7 @@ export default class AccountDrawer extends Vue {
     }
   }
 
-  async commitAccount(acc: Entities.Account) {
+  async commitAccount(acc: Account) {
     let main = await DB.getMainAccount();
     await DB.setMainAccount(acc);
     let accs = await DB.accounts.toArray();

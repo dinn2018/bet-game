@@ -1,18 +1,18 @@
 import Vuex from "vuex";
-import DB, { Entities, ZeroAddress } from "./database";
+import DB, { Account, ZeroAddress } from "./database";
 interface AccountStore {
-  mainAccount: Entities.Account
-  accounts: Array<Entities.Account>
+  mainAccount: Account
+  accounts: Array<Account>
 }
 
 export default class Store extends Vuex.Store<AccountStore> {
   constructor() {
     super({
       mutations: {
-        ["put"](state: AccountStore, payload: Array<Entities.Account>) {
+        ["put"](state: AccountStore, payload: Array<Account>) {
           state.accounts = payload
         },
-        ["setMain"](state: AccountStore, payload: Entities.Account) {
+        ["setMain"](state: AccountStore, payload: Account) {
           state.mainAccount = payload
         }
       },

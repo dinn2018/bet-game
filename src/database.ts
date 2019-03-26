@@ -5,16 +5,15 @@ export enum AccountLevel {
   Normal = 1
 }
 
-export namespace Entities {
-  export interface Account {
-    id?: number
-    address: string
-    createdTime?: number
-    level?: number
-  }
+export interface Account {
+  id?: number
+  address: string
+  createdTime?: number
+  level?: number
 }
+
 class Database extends Dexie {
-  public readonly accounts!: Dexie.Table<Entities.Account, number>
+  public readonly accounts!: Dexie.Table<Account, number>
   constructor() {
     super('BetGame')
     this.version(2).stores({
@@ -26,7 +25,7 @@ class Database extends Dexie {
     })
   }
 
-  public async setMainAccount(acc: Entities.Account) {
+  public async setMainAccount(acc: Account) {
     let accs = await this.accounts.toArray()
     for (let a of accs) {
       if (a.level != AccountLevel.Normal) {

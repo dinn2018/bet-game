@@ -269,7 +269,7 @@
 import { Vue, Component, Prop } from "vue-property-decorator";
 import { Match, MatchView, MatchStatus, MatchSeedIds } from "../models/Match";
 import { BetRecord } from "../models/BetRecord";
-import DB, { AccountLevel, Entities, ZeroAddress } from "../database";
+import DB, { AccountLevel, Account, ZeroAddress } from "../database";
 import BigNumber from "bignumber.js";
 import BetDialog from "../components/BetDialog.vue";
 import BetRecordCard from "@/components/BetRecordCard.vue";
@@ -551,7 +551,7 @@ export default class IndividualMatchDetails extends Vue {
     }
   }
 
-  async commitAccount(acc: Entities.Account) {
+  async commitAccount(acc: Account) {
     let main = await DB.getMainAccount();
     await DB.setMainAccount(acc);
     let accs = await DB.accounts.toArray();

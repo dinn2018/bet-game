@@ -65,7 +65,7 @@
 
 <script lang="ts">
 import { Match, MatchSeedIds } from "../models/Match";
-import DB, { Entities, AccountLevel, ZeroAddress } from "../database";
+import DB, { Account, AccountLevel, ZeroAddress } from "../database";
 import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import BigNumber from "bignumber.js";
 import { contractAddr, MethodABI, unit, zero } from "../config";
@@ -169,7 +169,7 @@ export default class BetDialog extends Vue {
     this.$emit("dismiss_dialog", false);
   }
 
-  async commitAccount(acc: Entities.Account) {
+  async commitAccount(acc: Account) {
     await DB.setMainAccount(acc);
     let accs = await DB.accounts.toArray();
     await this.$store.commit("put", accs);

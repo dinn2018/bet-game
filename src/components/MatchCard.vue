@@ -85,7 +85,7 @@
 
 <script lang="ts">
 import { Match, MatchView, MatchStatus } from "../models/Match";
-import DB, { Entities, ZeroAddress } from "../database";
+import DB, { Account, ZeroAddress } from "../database";
 import { Vue, Component, Prop } from "vue-property-decorator";
 import BigNumber from "bignumber.js";
 import { contractAddr, MethodABI, unit, zero } from "../config";
