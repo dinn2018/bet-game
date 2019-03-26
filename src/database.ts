@@ -16,7 +16,7 @@ export namespace Entities {
 class Database extends Dexie {
   public readonly accounts!: Dexie.Table<Entities.Account, number>
   constructor() {
-    super('LegendaryGambling')
+    super('BetGame')
     this.version(2).stores({
       accounts: '++id, &address, createdTime, level',
     })
