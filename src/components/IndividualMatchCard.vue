@@ -98,12 +98,12 @@
 </template>
 
 <script lang="ts">
-import { Match, MatchView, MatchStatus, MatchSeedIds } from "../models/Match";
-import DB, { Account, ZeroAddress } from "../database";
-import { Vue, Component, Prop } from "vue-property-decorator";
 import BigNumber from "bignumber.js";
-import { contractAddr, MethodABI, unit, zero } from "../config";
-import { GlobalEvent, Events } from "../GlobalEvent";
+import { Match, MatchView, MatchStatus, MatchSeedIds } from "@/models/Match";
+import DB, { Account, ZeroAddress } from "@/database";
+import { Vue, Component, Prop } from "vue-property-decorator";
+import { contractAddr, MethodABI, unit, zero } from "@/config";
+import { GlobalEvent, Events } from "@/GlobalEvent";
 
 @Component
 export default class IndividualMatchCard extends Vue {
@@ -124,7 +124,7 @@ export default class IndividualMatchCard extends Vue {
   betOne: string = "0";
   betTwo: string = "0";
 
-  async created() {
+  private async created() {
     await this.reload();
     GlobalEvent.$on(Events.TickerStart, async () => {
       console.log("PersonalMatchCard on TickerStart");
@@ -132,17 +132,17 @@ export default class IndividualMatchCard extends Vue {
     });
   }
 
-  async reload() {
+  private async reload() {
     this.match = await this.getMatch(this.match.id);
     await this.updateYourBet();
   }
 
-  destroyed() {
+  private destroyed() {
     console.log("PersonalMatchCard destroyed");
     GlobalEvent.$off(Events.TickerStart);
   }
 
-  async getMatch(id: BigNumber) {
+  private async getMatch(id: BigNumber) {
     const getmatchMethod = connex.thor
       .account(contractAddr)
       .method(MethodABI.getMatch);
@@ -163,14 +163,14 @@ export default class IndividualMatchCard extends Vue {
     );
   }
 
-  async updateYourBet() {
+  private async updateYourBet() {
     let bet = await this.getBet(this.match.id, MatchSeedIds.one);
     this.betOne = bet.dividedBy(unit).toString(10);
     bet = await this.getBet(this.match.id, MatchSeedIds.two);
     this.betTwo = bet.dividedBy(unit).toString(10);
   }
 
-  async getBet(matchId: BigNumber, seedId: number) {
+  private async getBet(matchId: BigNumber, seedId: number) {
     let acc = await DB.getMainAccount();
     if (acc.address == ZeroAddress) {
       return zero;
@@ -183,88 +183,12 @@ export default class IndividualMatchCard extends Vue {
     return new BigNumber(decoded["0"]);
   }
 
-  details() {
+  private details() {
     this.$router.push({
       name: "individualMatchDetails",
       params: { matchId: this.match.id.toString() }
     });
   }
-
-  // async withdraw() {
-  //   try {
-  //     let acc = await DB.getMainAccount();
-  //     let ob = await this.getBet(this.matchId, 1);
-  //     let isOneBetGTZero = new BigNumber(ob).isGreaterThan(zero);
-  //     let tb = await this.getBet(this.matchId, 2);
-  //     let isTwoBetGTZero = new BigNumber(tb).isGreaterThan(zero);
-  //     if (this.match.status == MatchStatus.finished) {
-  //       //withdraw bonus
-  //       if (
-  //         (this.match.oneScore > this.match.twoScore && isOneBetGTZero) ||
-  //         (this.match.oneScore < this.match.twoScore && isTwoBetGTZero) ||
-  //         this.match.oneScore == this.match.twoScore
-  //       ) {
-  //         const withdrawTx = connex.vendor.sign("tx").signer(acc.address);
-  //         const clause = connex.thor
-  //           .account(contractAddr)
-  //           .method(ContractABI.withdraw)
-  //           .asClause(this.match.id);
-  //         let result = await withdrawTx.request([
-  //           { comment: "withdraw bonus", ...clause }
-  //         ]);
-  //         let a = {
-  //           address: result.signer,
-  //           createdTime: Date.now(),
-  //           level: AccountLevel.Main
-  //         };
-  //         // await this.commitAccount(a);
-  //         console.log("withdrawTx result", result);
-  //         // this.dialog = false;
-  //         alert("withdraw bonus successfully!");
-  //       } else {
-  //         alert("your bet is failed!");
-  //       }
-  //     } else if (
-  //       this.match.status == MatchStatus.active ||
-  //       this.match.status == MatchStatus.cancelled
-  //     ) {
-  //       const cancelBetTx = connex.vendor.sign("tx").signer(acc.address);
-  //       const cancelBetMethod = connex.thor
-  //         .account(contractAddr)
-  //         .method(ContractABI.cancelBet);
-  //       let clauses = [];
-  //       if (isOneBetGTZero) {
-  //         let oneClause = cancelBetMethod.asClause(this.match.id, 1);
-  //         clauses.push({
-  //           comment: "cancel bet for " + this.match.oneSeedName,
-  //           ...oneClause
-  //         });
-  //       }
-  //       if (isTwoBetGTZero) {
-  //         let twoClause = cancelBetMethod.asClause(this.match.id, 2);
-  //         clauses.push({
-  //           comment: "cancel bet for " + this.match.twoSeedName,
-  //           ...twoClause
-  //         });
-  //       }
-  //       let result = await cancelBetTx.request(clauses);
-  //       let a = {
-  //         address: result.signer,
-  //         createdTime: Date.now(),
-  //         level: AccountLevel.Main
-  //       };
-  //       // await this.commitAccount(a);
-  //       console.log("cancelBetTx result", result);
-  //       // this.dialog = false;
-  //       alert("cancel bet successfully!");
-  //     } else if (this.match.status == MatchStatus.locked) {
-  //       alert("match is not locked now!");
-  //     }
-  //     // this.dialog = false;
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // }
 }
 </script>
 <style>

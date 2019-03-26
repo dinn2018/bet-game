@@ -18,9 +18,9 @@
 </template>
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
-import AccountCard from "./AccountCard.vue";
-import DB, { Account, AccountLevel } from "../database";
-import { GlobalEvent, Events } from "../GlobalEvent";
+import AccountCard from "@/components/AccountCard.vue";
+import DB, { Account, AccountLevel } from "@/database";
+import { GlobalEvent, Events } from "@/GlobalEvent";
 
 @Component({
   components: { AccountCard }
@@ -28,11 +28,11 @@ import { GlobalEvent, Events } from "../GlobalEvent";
 export default class AccountDrawer extends Vue {
   @Prop() drawer: boolean = false;
 
-  get accounts() {
+  private get accounts() {
     return this.$store.state.accounts;
   }
 
-  async registerAccount() {
+  private async registerAccount() {
     try {
       const register = connex.vendor.sign("cert");
       let result = await register.request({
@@ -51,11 +51,11 @@ export default class AccountDrawer extends Vue {
       await this.commitAccount(acc);
       alert("register " + acc.address + " successfully!");
     } catch (err) {
-      alert(err.message);
+      console.log(err.message);
     }
   }
 
-  async commitAccount(acc: Account) {
+  private async commitAccount(acc: Account) {
     let main = await DB.getMainAccount();
     await DB.setMainAccount(acc);
     let accs = await DB.accounts.toArray();

@@ -7,36 +7,36 @@ import IndividualMatchDetails from './views/IndividualMatchDetails.vue'
 Vue.use(Router)
 
 const router = new Router({
-  mode: 'hash',
-  routes: [
-    {
-      name: 'root',
-      redirect: { name: 'matches' },
-      path: '/'
-    },
-    {
-      name: 'matches',
-      component: MatchList,
-      path: '/matches'
-    },
-    {
-      name: 'individualmatches',
-      component: IndividualMatchList,
-      path: '/individualmatches'
-    },
-    {
-      name: 'matchDetail',
-      component: MatchDetails,
-      path: '/matches/:matchId',
-      props: true
-    },
-    {
-      name: 'individualMatchDetails',
-      component: IndividualMatchDetails,
-      path: '/individualmatches/:matchId',
-      props: true
-    }
-  ]
+	mode: 'hash',
+	routes: [
+		{
+			name: 'root',
+			redirect: { name: 'matches' },
+			path: '/'
+		},
+		{
+			name: 'matches',
+			component: MatchList,
+			path: '/matches'
+		},
+		{
+			name: 'individualmatches',
+			component: IndividualMatchList,
+			path: '/individualmatches'
+		},
+		{
+			name: 'matchDetail',
+			component: MatchDetails,
+			path: '/matches/:matchId',
+			props: true
+		},
+		{
+			name: 'individualMatchDetails',
+			component: IndividualMatchDetails,
+			path: '/individualmatches/:matchId',
+			props: true
+		}
+	]
 })
 
 export default router

@@ -20,12 +20,14 @@
 </template>
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import AccountDrawer from "./components/AccountDrawer.vue";
-import DB, { ZeroAddress } from "./database";
-import { GlobalEvent, Events } from "./GlobalEvent";
+import AccountDrawer from "@/components/AccountDrawer.vue";
+import DB, { ZeroAddress } from "@/database";
+import { GlobalEvent, Events } from "@/GlobalEvent";
 import { zero } from "@/config";
 @Component({
-  components: { AccountDrawer }
+  components: {
+    AccountDrawer
+  }
 })
 export default class App extends Vue {
   drawer = false;
@@ -56,7 +58,9 @@ export default class App extends Vue {
   }
 
   async created() {
-    this.$router.push({ name: "root" });
+    this.$router.push({
+      name: "root"
+    });
     let ticker = connex.thor.ticker();
     do {
       console.log("app emit TickerStart");
@@ -76,15 +80,14 @@ export default class App extends Vue {
 html {
   height: 100vh;
 }
+
 body {
   min-width: 1280px;
   height: 100%;
 }
+
 .router-view {
   height: 100%;
   overflow: auto;
 }
 </style>
-
-
-

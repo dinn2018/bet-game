@@ -112,6 +112,12 @@
   </div>
 </template>
 <script lang="ts">
+import BigNumber from "bignumber.js";
+import IndividualMatchCard from "@/components/IndividualMatchCard.vue";
+import DB, { ZeroAddress } from "@/database";
+import { Vue, Component, Prop } from "vue-property-decorator";
+import { GlobalEvent, Events } from "@/GlobalEvent";
+import { MatchView, MatchStatus } from "@/models/Match";
 import {
   contractAddr,
   MethodTopics,
@@ -119,13 +125,6 @@ import {
   HttpHost,
   zero
 } from "../config";
-
-import IndividualMatchCard from "../components/IndividualMatchCard.vue";
-import DB, { ZeroAddress } from "../database";
-import { Vue, Component, Prop } from "vue-property-decorator";
-import BigNumber from "bignumber.js";
-import { GlobalEvent, Events } from "../GlobalEvent";
-import { MatchView, MatchStatus } from "../models/Match";
 
 @Component({
   components: {
@@ -144,7 +143,7 @@ export default class IndividualMatchList extends Vue {
   isAllSelected = false;
   selectedMatchStatus = MatchStatus.active;
 
-  async created() {
+  private async created() {
     try {
       this.isActiveSelected = true;
       await this.loadMatchViews();
@@ -153,18 +152,18 @@ export default class IndividualMatchList extends Vue {
         await this.loadMatchViews;
       });
     } catch (err) {
-      console.error(err);
+      console.log(err.message);
     }
   }
 
-  async loadMatchViews() {
+  private async loadMatchViews() {
     this.isLoading = true;
     this.matchViews = [];
     this.matchViews = await this.getMatchViews(this.selectedMatchStatus);
     this.isLoading = false;
   }
 
-  async overedList() {
+  private async overedList() {
     console.log("overedList");
     this.isOverSelected = true;
     this.isActiveSelected = false;
@@ -175,7 +174,7 @@ export default class IndividualMatchList extends Vue {
     await this.loadMatchViews();
   }
 
-  async activeList() {
+  private async activeList() {
     console.log("activeList");
     this.isOverSelected = false;
     this.isActiveSelected = true;
@@ -186,7 +185,7 @@ export default class IndividualMatchList extends Vue {
     await this.loadMatchViews();
   }
 
-  async invalidList() {
+  private async invalidList() {
     console.log("invalidList");
     this.isOverSelected = false;
     this.isActiveSelected = false;
@@ -197,7 +196,7 @@ export default class IndividualMatchList extends Vue {
     await this.loadMatchViews();
   }
 
-  async allList() {
+  private async allList() {
     console.log("allList");
     this.isOverSelected = false;
     this.isActiveSelected = false;
@@ -208,12 +207,12 @@ export default class IndividualMatchList extends Vue {
     await this.loadMatchViews();
   }
 
-  destroyed() {
+  private destroyed() {
     console.log("IndividualMatchList destroyed");
     GlobalEvent.$off(Events.AccountChanged);
   }
 
-  async lastpage() {
+  private async lastpage() {
     this.page--;
     if (this.page < 0) {
       this.page = 0;
@@ -221,17 +220,17 @@ export default class IndividualMatchList extends Vue {
     await this.loadMatchViews();
   }
 
-  async nextpage() {
+  private async nextpage() {
     this.page++;
     await this.loadMatchViews();
   }
 
-  async getMatchViews(status: number) {
+  private async getMatchViews(status: number) {
     let main = await DB.getMainAccount();
     if (main.address == ZeroAddress) {
       return [];
     }
-    let matchViews = [];
+    let matchViews: Array<MatchView> = [];
     try {
       let res = await this.$http.get(
         HttpHost +
@@ -246,16 +245,14 @@ export default class IndividualMatchList extends Vue {
       let data = await res.json();
       for (let m of data) {
         let match = m.quiz;
-        matchViews.push(
-          new MatchView(
-            new BigNumber(match._id),
-            HttpHost + match.leftLogo,
-            HttpHost + match.rightLogo
-          )
-        );
+        matchViews.push({
+          id: new BigNumber(match._id),
+          oneLogo: HttpHost + match.leftLogo,
+          twoLogo: HttpHost + match.rightLogo
+        });
       }
     } catch (err) {
-      console.error("err", err);
+      console.log(err.message);
     }
     return matchViews;
   }

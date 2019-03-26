@@ -16,9 +16,9 @@
     </v-layout>
   </v-card>
 </template>
-
+ 
 <script lang="ts">
-import { BetRecord } from "../models/BetRecord";
+import { BetRecord } from "@/models/BetRecord";
 import { Vue, Component, Prop } from "vue-property-decorator";
 
 @Component

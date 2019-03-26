@@ -152,14 +152,14 @@
   </div>
 </template>
 <script lang="ts">
-import { Vue, Component, Prop } from "vue-property-decorator";
-import { Match, MatchView, MatchStatus, MatchSeedIds } from "../models/Match";
-import { BetRecord } from "../models/BetRecord";
-import DB, { AccountLevel, ZeroAddress } from "../database";
 import BigNumber from "bignumber.js";
-import BetDialog from "../components/BetDialog.vue";
+import { Vue, Component, Prop } from "vue-property-decorator";
+import { Match, MatchView, MatchStatus, MatchSeedIds } from "@/models/Match";
+import { BetRecord } from "@/models/BetRecord";
+import DB, { AccountLevel, ZeroAddress } from "@/database";
+import BetDialog from "@/components/BetDialog.vue";
 import BetRecordCard from "@/components/BetRecordCard.vue";
-import { GlobalEvent, Events } from "../GlobalEvent";
+import { GlobalEvent, Events } from "@/GlobalEvent";
 import { abi } from "thor-devkit";
 import {
   contractAddr,
@@ -170,7 +170,6 @@ import {
   EventABI,
   HttpHost
 } from "../config";
-import { defaultCoreCipherList } from "constants";
 
 @Component({
   components: { BetDialog, BetRecordCard }
@@ -199,20 +198,21 @@ export default class MatchDetails extends Vue {
     new BigNumber(0)
   );
 
-  betOneSeed() {
+  private betOneSeed() {
     this.shoudShowBet = true;
     this.selectedSeedId = MatchSeedIds.one;
   }
 
-  dismissDialog(val: boolean) {
+  private dismissDialog(val: boolean) {
     this.shoudShowBet = val;
   }
 
-  betTwoSeed() {
+  private betTwoSeed() {
     this.shoudShowBet = true;
     this.selectedSeedId = MatchSeedIds.two;
   }
-  async created() {
+
+  private async created() {
     console.log("MatchDetails created");
     await this.reload();
     await this.loadBetRecords();
@@ -229,18 +229,18 @@ export default class MatchDetails extends Vue {
     });
   }
 
-  async reloadBetRecords() {
+  private async reloadBetRecords() {
     this.betRecords = await this.getBetRecords();
   }
 
-  async loadBetRecords() {
+  private async loadBetRecords() {
     this.betRecords = [];
     this.isLoading = true;
     this.betRecords = await this.getBetRecords();
     this.isLoading = false;
   }
 
-  async getBetRecords() {
+  private async getBetRecords() {
     let matchIdTopic =
       "0x" + new BigNumber(this.matchId).toString(16).padStart(64, "0");
     let events = await connex.thor
@@ -297,7 +297,7 @@ export default class MatchDetails extends Vue {
     return brs;
   }
 
-  async lastpage() {
+  private async lastpage() {
     this.offset -= this.limit;
     if (this.offset < 0) {
       this.offset = 0;
@@ -305,23 +305,23 @@ export default class MatchDetails extends Vue {
     await this.loadBetRecords();
   }
 
-  async nextpage() {
+  private async nextpage() {
     this.offset += this.limit;
     await this.loadBetRecords();
   }
 
-  async reload() {
+  private async reload() {
     this.match = await this.getMatch();
     await this.updateYourBet();
   }
 
-  destroyed() {
+  private destroyed() {
     console.log("MatchDetails destroyed");
     GlobalEvent.$off(Events.TickerStart);
     GlobalEvent.$off(Events.AccountChanged);
   }
 
-  async getMatch() {
+  private async getMatch() {
     const getmatchMethod = connex.thor
       .account(contractAddr)
       .method(MethodABI.getMatch);
@@ -342,25 +342,26 @@ export default class MatchDetails extends Vue {
     try {
       let res = await this.$http.get(HttpHost + "/api/quiz/" + this.matchId);
       let data = await res.json();
-      match.view = new MatchView(
-        new BigNumber(decoded.id),
-        HttpHost + data.leftLogo,
-        HttpHost + data.rightLogo
-      );
+
+      match.view = {
+        id: new BigNumber(decoded.id),
+        oneLogo: HttpHost + data.leftLogo,
+        twoLogo: HttpHost + data.rightLogo
+      };
     } catch (err) {
-      console.error("err", err);
+      console.log(err.message);
     }
     return match;
   }
 
-  async updateYourBet() {
+  private async updateYourBet() {
     let bet = await this.getBet(this.match.id, MatchSeedIds.one);
     this.oneSeedBet = bet.dividedBy(unit).toString(10);
     bet = await this.getBet(this.match.id, MatchSeedIds.two);
     this.twoSeedBet = bet.dividedBy(unit).toString(10);
   }
 
-  async getBet(matchId: BigNumber, seedId: number) {
+  private async getBet(matchId: BigNumber, seedId: number) {
     let acc = await DB.getMainAccount();
     if (acc.address == ZeroAddress) {
       return zero;

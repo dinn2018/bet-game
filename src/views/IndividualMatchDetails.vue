@@ -266,14 +266,14 @@
   </div>
 </template>
 <script lang="ts">
-import { Vue, Component, Prop } from "vue-property-decorator";
-import { Match, MatchView, MatchStatus, MatchSeedIds } from "../models/Match";
-import { BetRecord } from "../models/BetRecord";
-import DB, { AccountLevel, Account, ZeroAddress } from "../database";
 import BigNumber from "bignumber.js";
-import BetDialog from "../components/BetDialog.vue";
+import { Vue, Component, Prop } from "vue-property-decorator";
+import { Match, MatchView, MatchStatus, MatchSeedIds } from "@/models/Match";
+import { BetRecord } from "@/models/BetRecord";
+import DB, { AccountLevel, Account, ZeroAddress } from "@/database";
+import BetDialog from "@/components/BetDialog.vue";
 import BetRecordCard from "@/components/BetRecordCard.vue";
-import { GlobalEvent, Events } from "../GlobalEvent";
+import { GlobalEvent, Events } from "@/GlobalEvent";
 import { abi } from "thor-devkit";
 import {
   contractAddr,
@@ -283,7 +283,7 @@ import {
   zero,
   MethodTopics,
   HttpHost
-} from "../config";
+} from "@/config";
 
 @Component({
   components: { BetDialog, BetRecordCard }
@@ -315,21 +315,21 @@ export default class IndividualMatchDetails extends Vue {
   canIWithdrawBonus = false;
   hasWithdraw = false;
 
-  betOneSeed() {
+  private betOneSeed() {
     this.shoudShowBet = true;
     this.selectedSeedId = MatchSeedIds.one;
   }
 
-  dismissDialog(val: boolean) {
+  private dismissDialog(val: boolean) {
     this.shoudShowBet = val;
   }
 
-  betTwoSeed() {
+  private betTwoSeed() {
     this.shoudShowBet = true;
     this.selectedSeedId = MatchSeedIds.two;
   }
 
-  async created() {
+  private async created() {
     console.log("IndividualMatchDetails created");
     await this.reload();
     await this.loadBetRecords();
@@ -346,7 +346,7 @@ export default class IndividualMatchDetails extends Vue {
     });
   }
 
-  async withdrawBonus() {
+  private async withdrawBonus() {
     try {
       let main = await DB.getMainAccount();
       if (main.address == ZeroAddress) {
@@ -381,11 +381,11 @@ export default class IndividualMatchDetails extends Vue {
       // alert("Withdraw your bonus for this match successfullly!");
       console.log("withdrawBonusTx result", result);
     } catch (err) {
-      console.log(err);
+      console.log(err.message);
     }
   }
 
-  async updateYourBet() {
+  private async updateYourBet() {
     this.isLoadingWithdraw = true;
     let bet = await this.getBet(this.match.id, MatchSeedIds.one);
     this.oneSeedBet = bet.dividedBy(unit);
@@ -414,7 +414,7 @@ export default class IndividualMatchDetails extends Vue {
     }
   }
 
-  async getBet(matchId: BigNumber, seedId: number) {
+  private async getBet(matchId: BigNumber, seedId: number) {
     let acc = await DB.getMainAccount();
     if (acc.address == ZeroAddress) {
       return zero;
@@ -427,18 +427,18 @@ export default class IndividualMatchDetails extends Vue {
     return new BigNumber(decoded["0"]);
   }
 
-  async reloadBetRecords() {
+  private async reloadBetRecords() {
     this.betRecords = await this.getBetRecords();
   }
 
-  async loadBetRecords() {
+  private async loadBetRecords() {
     this.betRecords = [];
     this.isLoading = true;
     this.betRecords = await this.getBetRecords();
     this.isLoading = false;
   }
 
-  async getBetRecords() {
+  private async getBetRecords() {
     let matchIdTopic =
       "0x" + new BigNumber(this.matchId).toString(16).padStart(64, "0");
     let events = await connex.thor
@@ -495,7 +495,7 @@ export default class IndividualMatchDetails extends Vue {
     return brs;
   }
 
-  async lastpage() {
+  private async lastpage() {
     this.offset -= this.limit;
     if (this.offset < 0) {
       this.offset = 0;
@@ -503,25 +503,25 @@ export default class IndividualMatchDetails extends Vue {
     await this.loadBetRecords();
   }
 
-  async nextpage() {
+  private async nextpage() {
     this.offset += this.limit;
     await this.loadBetRecords();
   }
 
-  async reload() {
+  private async reload() {
     this.match = await this.getMatch();
     await this.updateYourBet();
   }
 
-  async withdrawBetOneSeed() {
+  private async withdrawBetOneSeed() {
     await this.withdrawBet(MatchSeedIds.one, this.match.oneSeedName);
   }
 
-  async withdrawBetTwoSeed() {
+  private async withdrawBetTwoSeed() {
     await this.withdrawBet(MatchSeedIds.two, this.match.twoSeedName);
   }
 
-  async withdrawBet(seedId: MatchSeedIds, seedName: string) {
+  private async withdrawBet(seedId: MatchSeedIds, seedName: string) {
     try {
       let main = await DB.getMainAccount();
       if (main.address == ZeroAddress) {
@@ -547,11 +547,11 @@ export default class IndividualMatchDetails extends Vue {
       // alert("Withdraw your bet for " + seedName + " successfullly!");
       console.log("withdrawBetTx result", result);
     } catch (err) {
-      console.error(err);
+      console.log(err.message);
     }
   }
 
-  async commitAccount(acc: Account) {
+  private async commitAccount(acc: Account) {
     let main = await DB.getMainAccount();
     await DB.setMainAccount(acc);
     let accs = await DB.accounts.toArray();
@@ -562,13 +562,13 @@ export default class IndividualMatchDetails extends Vue {
     }
   }
 
-  destroyed() {
+  private destroyed() {
     console.log("IndividualMatchDetails destroyed");
     GlobalEvent.$off(Events.TickerStart);
     GlobalEvent.$off(Events.AccountChanged);
   }
 
-  async getMatch() {
+  private async getMatch() {
     const getmatchMethod = connex.thor
       .account(contractAddr)
       .method(MethodABI.getMatch);
@@ -589,13 +589,13 @@ export default class IndividualMatchDetails extends Vue {
     try {
       let res = await this.$http.get(HttpHost + "/api/quiz/" + this.matchId);
       let data = await res.json();
-      match.view = new MatchView(
-        new BigNumber(decoded.id),
-        HttpHost + data.leftLogo,
-        HttpHost + data.rightLogo
-      );
+      match.view = {
+        id: new BigNumber(decoded.id),
+        oneLogo: HttpHost + data.leftLogo,
+        twoLogo: HttpHost + data.rightLogo
+      };
     } catch (err) {
-      console.error("err", err);
+      console.log(err.message);
     }
     return match;
   }

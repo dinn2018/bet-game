@@ -12,12 +12,12 @@ import VueResource from 'vue-resource';
 Vue.use(Vuex)
 Vue.use(VueResource)
 Vue.use(Vuetify,
-  {
-    iconfont: 'fa'
-  });
+	{
+		iconfont: 'fa'
+	});
 
 new Vue({
-  store: new Store(),
-  router,
-  render: (h) => h(App)
+	store: new Store(),
+	router,
+	render: (h) => h(App)
 }).$mount('#app')

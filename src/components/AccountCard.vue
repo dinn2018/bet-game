@@ -3,25 +3,25 @@
     <v-icon class="account_address_icon" style="font-size:15px">fas fa-address-book</v-icon>
     <div class="account_address">{{account.address}}</div>
     <v-icon class="account_balance_icon" style="font-size:15px">fas fa-dollar-sign</v-icon>
-    <div class="account_balance">{{balance}}</div>
+    <div class="account_balance">{{balance}} vet</div>
     <v-icon v-show="account.level == 0" class="account_main_icon">fas fa-check</v-icon>
   </v-card>
 </template>
 
 <script lang="ts">
-import { unit } from "../config";
-import DB, { Account } from "../database";
-import { Vue, Component, Prop } from "vue-property-decorator";
 import BigNumber from "bignumber.js";
-import { GlobalEvent, Events } from "../GlobalEvent";
+import { unit } from "@/config";
+import DB, { Account } from "@/database";
+import { GlobalEvent, Events } from "@/GlobalEvent";
+import { Vue, Component, Prop } from "vue-property-decorator";
 
 @Component
 export default class AccountCard extends Vue {
   @Prop() account!: Account;
 
-  balance: string = "0 vet";
+  balance: string = "0";
 
-  async selected() {
+  private async selected() {
     let main = await DB.getMainAccount();
     await DB.setMainAccount(this.account);
     let accs = await DB.accounts.toArray();
@@ -32,13 +32,13 @@ export default class AccountCard extends Vue {
     }
   }
 
-  async getbalance(addr: string) {
+  private async getbalance(addr: string) {
     let a = await connex.thor.account(addr).get();
     let balance = new BigNumber(a.balance).div(unit).toString(10);
-    return balance.split(".")[0] + " vet";
+    return balance.split(".")[0];
   }
 
-  async created() {
+  private async created() {
     this.balance = await this.getbalance(this.account.address);
   }
 }

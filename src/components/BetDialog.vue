@@ -64,12 +64,12 @@
 </template>
 
 <script lang="ts">
-import { Match, MatchSeedIds } from "../models/Match";
-import DB, { Account, AccountLevel, ZeroAddress } from "../database";
-import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import BigNumber from "bignumber.js";
-import { contractAddr, MethodABI, unit, zero } from "../config";
-import { GlobalEvent, Events } from "../GlobalEvent";
+import { Match, MatchSeedIds } from "@/models/Match";
+import DB, { Account, AccountLevel, ZeroAddress } from "@/database";
+import { Vue, Component, Prop, Watch } from "vue-property-decorator";
+import { contractAddr, MethodABI, unit, zero } from "@/config";
+import { GlobalEvent, Events } from "@/GlobalEvent";
 
 @Component
 export default class BetDialog extends Vue {
@@ -93,7 +93,7 @@ export default class BetDialog extends Vue {
     }
   }
 
-  blanceRules = [
+  private blanceRules = [
     (value: string) => {
       const v = new BigNumber(value);
       const temp = v.multipliedBy(unit);
@@ -104,7 +104,7 @@ export default class BetDialog extends Vue {
     }
   ];
 
-  get seedName() {
+  private get seedName() {
     if (this.betSeedId == MatchSeedIds.one) {
       return this.match.oneSeedName;
     } else if (this.betSeedId == MatchSeedIds.two) {
@@ -112,15 +112,15 @@ export default class BetDialog extends Vue {
     }
   }
 
-  async created() {
+  private async created() {
     console.log("BetDialog created");
   }
 
-  destroyed() {
+  private destroyed() {
     console.log("BetDialog destroyed");
   }
 
-  get totalValue() {
+  private get totalValue() {
     if (this.betSeedId == MatchSeedIds.one) {
       return this.match.oneSeedBonusPool;
     } else if (this.betSeedId == MatchSeedIds.two) {
@@ -129,7 +129,7 @@ export default class BetDialog extends Vue {
     return 0;
   }
 
-  async ok() {
+  private async ok() {
     try {
       let acc = await DB.getMainAccount();
       if (acc.address == ZeroAddress) {
@@ -161,22 +161,22 @@ export default class BetDialog extends Vue {
       console.log("betTx result", result);
       this.dismiss();
     } catch (err) {
-      console.error("bet err", err);
+      console.log(err.message);
     }
   }
 
-  dismiss() {
+  private dismiss() {
     this.$emit("dismiss_dialog", false);
   }
 
-  async commitAccount(acc: Account) {
+  private async commitAccount(acc: Account) {
     await DB.setMainAccount(acc);
     let accs = await DB.accounts.toArray();
     await this.$store.commit("put", accs);
     await this.$store.commit("setMain", acc);
   }
 
-  async cancel() {
+  private async cancel() {
     this.dismiss();
   }
 }

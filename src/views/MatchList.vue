@@ -37,12 +37,12 @@
   </div>
 </template>
 <script lang="ts">
-import { contractAddr, MethodTopics, EventABI, HttpHost } from "../config";
-import MatchCard from "../components/MatchCard.vue";
-import { Vue, Component, Prop } from "vue-property-decorator";
 import BigNumber from "bignumber.js";
-import { GlobalEvent, Events } from "../GlobalEvent";
-import { MatchView } from "../models/Match";
+import { contractAddr, MethodTopics, EventABI, HttpHost } from "@/config";
+import MatchCard from "@/components/MatchCard.vue";
+import { Vue, Component, Prop } from "vue-property-decorator";
+import { GlobalEvent, Events } from "@/GlobalEvent";
+import { MatchView } from "@/models/Match";
 
 @Component({
   components: { MatchCard }
@@ -53,7 +53,7 @@ export default class MatchList extends Vue {
   page_size = 10;
   isLoading = true;
 
-  async created() {
+  private async created() {
     try {
       await this.loadMatchViews();
       GlobalEvent.$on(Events.TickerStart, async () => {
@@ -63,16 +63,16 @@ export default class MatchList extends Vue {
         }
       });
     } catch (err) {
-      console.error(err);
+      console.log(err.message);
     }
   }
 
-  destroyed() {
+  private destroyed() {
     console.log("MatchList destroyed");
     GlobalEvent.$off(Events.TickerStart);
   }
 
-  async lastpage() {
+  private async lastpage() {
     this.page--;
     if (this.page < 0) {
       this.page = 0;
@@ -80,13 +80,13 @@ export default class MatchList extends Vue {
     await this.loadMatchViews();
   }
 
-  async nextpage() {
+  private async nextpage() {
     this.page++;
     await this.loadMatchViews();
   }
 
-  async getMatchViews() {
-    let matches = [];
+  private async getMatchViews() {
+    let matches: Array<MatchView> = [];
     try {
       let res = await this.$http.get(
         HttpHost +
@@ -97,28 +97,26 @@ export default class MatchList extends Vue {
       );
       let data = await res.json();
       for (let m of data) {
-        matches.push(
-          new MatchView(
-            new BigNumber(m._id),
-            HttpHost + m.leftLogo,
-            HttpHost + m.rightLogo
-          )
-        );
+        matches.push({
+          id: new BigNumber(m._id),
+          oneLogo: HttpHost + m.leftLogo,
+          twoLogo: HttpHost + m.rightLogo
+        });
       }
     } catch (err) {
-      console.error("err", err);
+      console.log(err.message);
     }
     return matches;
   }
 
-  async loadMatchViews() {
+  private async loadMatchViews() {
     this.matchViews = [];
     this.isLoading = true;
     this.matchViews = await this.getMatchViews();
     this.isLoading = false;
   }
 
-  async reloadMatchViews() {
+  private async reloadMatchViews() {
     this.page = 0;
     this.matchViews = await this.getMatchViews();
   }

@@ -1,17 +1,12 @@
-import { BigNumber } from 'bignumber.js'
-import { unit, zero } from '../config';
+import { BigNumber } from 'bignumber.js';
+import { unit, zero } from '@/config';
 
 
-class MatchView {
-    public id: BigNumber;
-    public oneLogo: string;
-    public twoLogo: string;
+interface MatchView {
+    id: BigNumber;
+    oneLogo: string;
+    twoLogo: string;
 
-    constructor(id: BigNumber, oneLogo: string, twoLogo: string) {
-        this.id = id
-        this.oneLogo = oneLogo
-        this.twoLogo = twoLogo
-    }
 }
 
 class Match {
@@ -27,24 +22,25 @@ class Match {
     public oneSeedBonus: BigNumber;
     public twoSeedBonus: BigNumber;
 
-    constructor(id: BigNumber, name: string, startTime: number, status: number, oneSeedName: string, twoSeedName: string, oneScore: number, twoScore: number, oneSeedBonus: BigNumber, twoSeedBonus: BigNumber, view: MatchView = new MatchView(new BigNumber(1), "", "")) {
-        this.id = id
-        this.name = name
-        this.startTime = startTime
-        this.status = status
-        this.oneSeedName = oneSeedName
-        this.twoSeedName = twoSeedName
-        this.view = view
-        this.oneScore = oneScore
-        this.twoScore = twoScore
-        this.oneSeedBonus = oneSeedBonus
-        this.twoSeedBonus = twoSeedBonus
+    // tslint:disable-next-line:max-line-length
+    constructor(id: BigNumber, name: string, startTime: number, status: number, oneSeedName: string, twoSeedName: string, oneScore: number, twoScore: number, oneSeedBonus: BigNumber, twoSeedBonus: BigNumber, view: MatchView = { id: new BigNumber(1), oneLogo: '', twoLogo: '' }) {
+        this.id = id;
+        this.name = name;
+        this.startTime = startTime;
+        this.status = status;
+        this.oneSeedName = oneSeedName;
+        this.twoSeedName = twoSeedName;
+        this.view = view;
+        this.oneScore = oneScore;
+        this.twoScore = twoScore;
+        this.oneSeedBonus = oneSeedBonus;
+        this.twoSeedBonus = twoSeedBonus;
     }
-    seedNameById(seedId: number) {
-        let seedName = "";
-        if (seedId == MatchSeedIds.one) {
+    public seedNameById(seedId: number) {
+        let seedName = '';
+        if (seedId === MatchSeedIds.one) {
             seedName = this.oneSeedName;
-        } else if (seedId == MatchSeedIds.two) {
+        } else if (seedId === MatchSeedIds.two) {
             seedName = this.twoSeedName;
         }
         return seedName;
@@ -59,74 +55,78 @@ class Match {
     get stage() {
         switch (this.status) {
             case MatchStatus.active:
-                return "waiting"
+                return 'waiting';
             case MatchStatus.locked:
-                return "locked"
+                return 'locked';
             case MatchStatus.cancelled:
-                return "cancelled"
+                return 'cancelled';
             case MatchStatus.finished:
-                return "over"
-            default: return ""
+                return 'over';
+            default: return '';
         }
     }
 
     get dateTime() {
-        let date = new Date(this.startTime);
-        let month = date.getMonth() + 1;
-        let trueMonth = month < 10 ? "0" + month.toString() : month.toString()
-        let day = date.getDate()
-        let trueDay = day < 10 ? "0" + day.toString() : day.toString()
-        let hour = date.getHours().toString();
-        let minute = date.getMinutes().toString();
-        return trueMonth + "-" + trueDay + " " + hour + ":" + minute;
+        const date = new Date(this.startTime);
+        const month = date.getMonth() + 1;
+        const trueMonth = month < 10 ? '0' + month.toString() : month.toString();
+        const day = date.getDate();
+        const trueDay = day < 10 ? '0' + day.toString() : day.toString();
+        const hour = date.getHours().toString();
+        const minute = date.getMinutes().toString();
+        return trueMonth + '-' + trueDay + ' ' + hour + ':' + minute;
     }
     get leftTime() {
-        let startDate = new Date(this.startTime).getTime();
-        let now = Date.now();
+        const startDate = new Date(this.startTime).getTime();
+        const now = Date.now();
         if (startDate <= now) {
-            return this.fullTime
+            return this.fullTime;
         }
-        let interval = (startDate - now) / 1000
-        let days = parseInt((interval / (3600 * 24)).toString())
-        let hours = parseInt((interval / 3600 % 24).toString())
-        let minutes = parseInt((interval / 60 % 24).toString())
+        const interval = (startDate - now) / 1000;
+        // tslint:disable-next-line:radix
+        const days = parseInt((interval / (3600 * 24)).toString());
+        // tslint:disable-next-line:radix
+        const hours = parseInt((interval / 3600 % 24).toString());
+        // tslint:disable-next-line:radix
+        const minutes = parseInt((interval / 60 % 24).toString());
         if (days > 0) {
-            return days.toString() + "Days " + hours.toString() + "Hours " + minutes.toString() + "minutes left"
+            return days.toString() + 'Days ' + hours.toString() + 'Hours ' + minutes.toString() + 'minutes left';
         }
         if (hours > 0) {
-            return hours.toString() + "Hours " + minutes.toString() + "minutes left"
+            return hours.toString() + 'Hours ' + minutes.toString() + 'minutes left';
         }
         if (minutes > 0) {
-            return minutes.toString() + "minutes left"
+            return minutes.toString() + 'minutes left';
         }
     }
     get fullTime() {
-        let date = new Date(this.startTime);
-        let year = date.getFullYear();
-        let month = date.getMonth() + 1;
-        let trueMonth = month < 10 ? "0" + month.toString() : month.toString()
-        let day = date.getDate()
-        let trueDay = day < 10 ? "0" + day.toString() : day.toString()
-        let hour = date.getHours()
-        let trueHour = hour < 10 ? "0" + hour.toString() : hour.toString()
-        let minute = date.getMinutes()
-        let trueMinute = minute < 10 ? "0" + minute.toString() : minute.toString()
-        return year + "-" + trueMonth + "-" + trueDay + " " + trueHour + ":" + trueMinute;
+        const date = new Date(this.startTime);
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        const trueMonth = month < 10 ? '0' + month.toString() : month.toString();
+        const day = date.getDate();
+        const trueDay = day < 10 ? '0' + day.toString() : day.toString();
+        const hour = date.getHours();
+        const trueHour = hour < 10 ? '0' + hour.toString() : hour.toString();
+        const minute = date.getMinutes();
+        const trueMinute = minute < 10 ? '0' + minute.toString() : minute.toString();
+        return year + '-' + trueMonth + '-' + trueDay + ' ' + trueHour + ':' + trueMinute;
     }
 }
 enum MatchStatus {
     active = 1,
     locked = 2,
     cancelled = 3,
-    finished = 4
+    finished = 4,
 }
 enum MatchSeedIds {
     one = 1,
-    two = 2
+    two = 2,
 }
+
 export {
     MatchView,
     Match,
     MatchStatus,
-    MatchSeedIds
-}
+    MatchSeedIds,
+};
