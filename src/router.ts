@@ -1,25 +1,42 @@
-import Vue from 'vue';
-import Router from 'vue-router';
-import Home from './views/Home.vue';
+import { Vue } from 'vue-property-decorator'
+import Router from 'vue-router'
+import MatchList from './views/MatchList.vue'
+import IndividualMatchList from "./views/IndividualMatchList.vue";
+import MatchDetails from './views/MatchDetails.vue'
+import IndividualMatchDetails from './views/IndividualMatchDetails.vue'
+Vue.use(Router)
 
-Vue.use(Router);
-
-export default new Router({
-  mode: 'history',
-  base: process.env.BASE_URL,
+const router = new Router({
+  mode: 'hash',
   routes: [
     {
-      path: '/',
-      name: 'home',
-      component: Home,
+      name: 'root',
+      redirect: { name: 'matches' },
+      path: '/'
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue'),
+      name: 'matches',
+      component: MatchList,
+      path: '/matches'
     },
-  ],
-});
+    {
+      name: 'individualmatches',
+      component: IndividualMatchList,
+      path: '/individualmatches'
+    },
+    {
+      name: 'matchDetail',
+      component: MatchDetails,
+      path: '/matches/:matchId',
+      props: true
+    },
+    {
+      name: 'individualMatchDetails',
+      component: IndividualMatchDetails,
+      path: '/individualmatches/:matchId',
+      props: true
+    }
+  ]
+})
+
+export default router
