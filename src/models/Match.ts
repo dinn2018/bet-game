@@ -55,13 +55,13 @@ class Match {
     get stage() {
         switch (this.status) {
             case MatchStatus.active:
-                return 'waiting';
+                return 'Waiting';
             case MatchStatus.locked:
-                return 'locked';
+                return 'Locked';
             case MatchStatus.cancelled:
-                return 'cancelled';
+                return 'Cancelled';
             case MatchStatus.finished:
-                return 'over';
+                return 'Over';
             default: return '';
         }
     }

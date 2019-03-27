@@ -32,7 +32,7 @@
                 <div class="content_center">Date</div>
               </v-flex>
               <v-flex sm1 align-self-center>
-                <div class="content_center">More</div>
+                <div class="content_center">Stage</div>
               </v-flex>
             </v-layout>
           </v-card>
@@ -47,7 +47,7 @@
           </v-list>
         </v-flex>
         <div v-else-if="isLoading == true" class="content_center" style="height:720px">
-          <v-progress-circular :size="40" indeterminate color="green"></v-progress-circular>
+          <v-progress-circular :size="70" indeterminate color="green"></v-progress-circular>
         </div>
         <div
           v-else
@@ -101,8 +101,8 @@
                 hover
                 v-bind:class="{'active_stage_color':isInvalidSelected, 'inactive_stage_color': !isInvalidSelected}"
                 style="width:60px;height:60px; display: flex;align-items: center;justify-content: center; border-radius:30px;"
-                @click="invalidList"
-              >Invalid</v-card>
+                @click="lockedList"
+              >Locked</v-card>
             </div>
           </v-flex>
         </v-layout>
@@ -139,7 +139,7 @@ export default class IndividualMatchList extends Vue {
 
   isOverSelected = false;
   isActiveSelected = true;
-  isInvalidSelected = false;
+  isLockedSelected = false;
   isAllSelected = false;
   selectedMatchStatus = MatchStatus.active;
 
@@ -167,7 +167,7 @@ export default class IndividualMatchList extends Vue {
     console.log("overedList");
     this.isOverSelected = true;
     this.isActiveSelected = false;
-    this.isInvalidSelected = false;
+    this.isLockedSelected = false;
     this.isAllSelected = false;
     this.page = 0;
     this.selectedMatchStatus = MatchStatus.finished;
@@ -178,21 +178,21 @@ export default class IndividualMatchList extends Vue {
     console.log("activeList");
     this.isOverSelected = false;
     this.isActiveSelected = true;
-    this.isInvalidSelected = false;
+    this.isLockedSelected = false;
     this.isAllSelected = false;
     this.page = 0;
     this.selectedMatchStatus = MatchStatus.active;
     await this.loadMatchViews();
   }
 
-  private async invalidList() {
+  private async lockedList() {
     console.log("invalidList");
     this.isOverSelected = false;
     this.isActiveSelected = false;
-    this.isInvalidSelected = true;
+    this.isLockedSelected = true;
     this.isAllSelected = false;
     this.page = 0;
-    this.selectedMatchStatus = MatchStatus.cancelled;
+    this.selectedMatchStatus = MatchStatus.locked;
     await this.loadMatchViews();
   }
 
@@ -200,7 +200,7 @@ export default class IndividualMatchList extends Vue {
     console.log("allList");
     this.isOverSelected = false;
     this.isActiveSelected = false;
-    this.isInvalidSelected = false;
+    this.isLockedSelected = false;
     this.isAllSelected = true;
     this.page = 0;
     this.selectedMatchStatus = 0;

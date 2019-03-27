@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card dark height="100">
+    <v-card dark hover height="100" @click="details">
       <v-layout row>
         <v-flex sm2>
           <div class="high_text">{{match.name}}</div>
@@ -81,16 +81,7 @@
           <div class="high_text">{{match.dateTime}}</div>
         </v-flex>
         <v-flex sm1 align-self-center>
-          <div class="content_center">
-            <v-card
-              dark
-              hover
-              tile
-              flat
-              style="width:50px; height: 50px;text-align: center;display: flex;align-items: center;justify-content: center;font-size: 10px;font-weight: bold;color:white; border-radius: 10px;"
-              @click="details"
-            >Details</v-card>
-          </div>
+          <div class="high_text">{{match.stage}}</div>
         </v-flex>
       </v-layout>
     </v-card>
