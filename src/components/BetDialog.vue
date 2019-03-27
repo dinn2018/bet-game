@@ -70,6 +70,7 @@ import DB, { Account, AccountLevel, ZeroAddress } from "@/database";
 import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import { GlobalEvent, Events } from "@/GlobalEvent";
 import { contractAddr, MethodABI, unit, zero } from "@/config";
+import swal from "sweetalert";
 
 @Component
 export default class BetDialog extends Vue {
@@ -133,13 +134,21 @@ export default class BetDialog extends Vue {
     try {
       const acc = await DB.getMainAccount();
       if (acc.address === ZeroAddress) {
-        alert("Register an account first!");
-        return;
+        return swal({
+          title: "No account available!",
+          text: "Please register an account from the menu",
+          icon: "warning",
+          dangerMode: true
+        });
       }
       const betForSeed = new BigNumber(this.bet);
       if (!betForSeed.isGreaterThanOrEqualTo(100)) {
-        alert("You must bet 100 vet at least!");
-        return;
+        return swal({
+          title: "Bet is too low!",
+          text: "100 VET at least!",
+          icon: "warning",
+          dangerMode: true
+        });
       }
       const betTx = connex.vendor.sign("tx").signer(acc.address);
       const betMethod = connex.thor.account(contractAddr).method(MethodABI.bet);
@@ -149,7 +158,7 @@ export default class BetDialog extends Vue {
       const result = await betTx.request([
         {
           comment:
-            "You will bet " + this.bet + " vet for " + this.seedName + " !",
+            "You will bet " + this.bet + " VET for " + this.seedName + " !",
           ...clause
         }
       ]);
@@ -160,6 +169,11 @@ export default class BetDialog extends Vue {
       });
       console.log("betTx result", result);
       this.dismiss();
+      return swal({
+        title: this.bet + " VET for " + this.seedName,
+        text: "Wait the transaction packed!",
+        icon: "success"
+      });
     } catch (err) {
       console.log(err.message);
     }

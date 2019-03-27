@@ -149,7 +149,7 @@ export default class IndividualMatchList extends Vue {
       await this.loadMatchViews();
       GlobalEvent.$on(Events.AccountChanged, async () => {
         this.page = 0;
-        await this.loadMatchViews;
+        await this.loadMatchViews();
       });
     } catch (err) {
       console.log(err.message);

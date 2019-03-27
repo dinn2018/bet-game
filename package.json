@@ -9,6 +9,7 @@
 	},
 	"dependencies": {
 		"dexie": "^2.0.4",
+		"sweetalert": "^2.1.2",
 		"vue": "^2.6.6",
 		"vue-class-component": "^6.0.0",
 		"vue-property-decorator": "^7.0.0",

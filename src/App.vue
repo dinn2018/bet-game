@@ -65,6 +65,7 @@ export default class App extends Vue {
     do {
       console.log("app emit TickerStart");
       GlobalEvent.$emit(Events.TickerStart);
+      GlobalEvent.$emit(Events.AccountTickerStart);
       await ticker.next();
     } while (!this.isDestroyed);
   }

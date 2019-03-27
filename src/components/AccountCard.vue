@@ -29,6 +29,10 @@ export default class AccountCard extends Vue {
     await this.$store.commit("setMain", this.account);
     if (main.address != this.account.address) {
       await GlobalEvent.$emit(Events.AccountChanged);
+      GlobalEvent.$on(Events.AccountTickerStart, async () => {
+        console.log("AccountCard on AccountTickerStart");
+        this.balance = await this.getbalance(this.account.address);
+      });
     }
   }
 
@@ -39,7 +43,20 @@ export default class AccountCard extends Vue {
   }
 
   private async created() {
+    console.log("AccountCard created");
     this.balance = await this.getbalance(this.account.address);
+    const main = await DB.getMainAccount();
+    if (this.account.address === main.address) {
+      GlobalEvent.$on(Events.AccountTickerStart, async () => {
+        console.log("AccountCard on AccountTickerStart");
+        this.balance = await this.getbalance(this.account.address);
+      });
+    }
+  }
+
+  private async destroyed() {
+    console.log("AccountCard destroyed");
+    GlobalEvent.$off(Events.AccountTickerStart);
   }
 }
 </script>

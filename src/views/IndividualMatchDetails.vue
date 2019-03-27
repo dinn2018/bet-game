@@ -274,6 +274,7 @@ import DB, { AccountLevel, Account, ZeroAddress } from "@/database";
 import BetDialog from "@/components/BetDialog.vue";
 import BetRecordCard from "@/components/BetRecordCard.vue";
 import { GlobalEvent, Events } from "@/GlobalEvent";
+import swal from "sweetalert";
 import { abi } from "thor-devkit";
 import {
   contractAddr,
@@ -350,8 +351,12 @@ export default class IndividualMatchDetails extends Vue {
     try {
       const main = await DB.getMainAccount();
       if (main.address == ZeroAddress) {
-        alert("Register an acount first");
-        return;
+        return swal({
+          title: "No account available!",
+          text: "Please register an account from the menu",
+          icon: "warning",
+          dangerMode: true
+        });
       }
       const withdrawBonusTx = connex.vendor.sign("tx").signer(main.address);
       const clause = connex.thor
@@ -378,8 +383,15 @@ export default class IndividualMatchDetails extends Vue {
         createdTime: Date.now(),
         level: AccountLevel.Main
       });
-      // alert("Withdraw your bonus for this match successfullly!");
       console.log("withdrawBonusTx result", result);
+      return swal({
+        title: "Withdraw bonus!",
+        text:
+          "Bonus will send to " +
+          main.address +
+          " , Check balance of your account",
+        icon: "success"
+      });
     } catch (err) {
       console.log(err.message);
     }
@@ -530,8 +542,12 @@ export default class IndividualMatchDetails extends Vue {
     try {
       const main = await DB.getMainAccount();
       if (main.address == ZeroAddress) {
-        alert("Register an acount first");
-        return;
+        return swal({
+          title: "No account available!",
+          text: "Please register an account from the menu",
+          icon: "warning",
+          dangerMode: true
+        });
       }
       const withdrawBetTx = connex.vendor.sign("tx").signer(main.address);
       const clause = connex.thor
@@ -549,8 +565,15 @@ export default class IndividualMatchDetails extends Vue {
         createdTime: Date.now(),
         level: AccountLevel.Main
       });
-      // alert("Withdraw your bet for " + seedName + " successfullly!");
       console.log("withdrawBetTx result", result);
+      return swal({
+        title: "Withdraw bet!",
+        text:
+          "Your bet will send to " +
+          main.address +
+          " , Check balance of your account",
+        icon: "success"
+      });
     } catch (err) {
       console.log(err.message);
     }
