@@ -204,7 +204,7 @@
                     v-if="isLoadingWithdraw == true"
                     style="display: flex;align-items: center;justify-content: center;"
                   >
-                    <v-icon style="margin-top:20px;font-size:30px">fas fa-spinner</v-icon>
+                    <v-progress-circular :size="40" indeterminate color="green"></v-progress-circular>
                   </div>
                   <v-card
                     v-else-if="hasWithdraw == true"
@@ -251,7 +251,7 @@
               ></BetRecordCard>
             </v-list>
             <div v-else-if="isLoading == true" class="v-list content_center">
-              <v-icon style="font-size:30px">fas fa-spinner</v-icon>
+              <v-progress-circular :size="40" indeterminate color="green"></v-progress-circular>
             </div>
             <div v-else class="v-list content_center" style="color: white;">No More Records</div>
           </v-flex>

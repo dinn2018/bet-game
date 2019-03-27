@@ -47,7 +47,7 @@
           </v-list>
         </v-flex>
         <div v-else-if="isLoading == true" class="content_center" style="height:720px">
-          <v-icon style="font-size:30px">fas fa-spinner</v-icon>
+          <v-progress-circular :size="40" indeterminate color="green"></v-progress-circular>
         </div>
         <div
           v-else

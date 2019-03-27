@@ -3,7 +3,7 @@
     <v-icon class="account_address_icon" style="font-size:15px">fas fa-address-book</v-icon>
     <div class="account_address">{{account.address}}</div>
     <v-icon class="account_balance_icon" style="font-size:15px">fas fa-dollar-sign</v-icon>
-    <div class="account_balance">{{balance}} vet</div>
+    <div class="account_balance">{{balance}} VET</div>
     <v-icon v-show="account.level === 0" class="account_main_icon">fas fa-check</v-icon>
   </v-card>
 </template>
