@@ -3,8 +3,7 @@
     <BetDialog
       :showBet="shoudShowBet"
       :betSeedId="selectedSeedId"
-      :oneBet="oneSeedBet"
-      :twoBet="twoSeedBet"
+      :yourBet="playerBet"
       :match="match"
       @dismiss_dialog="dismissDialog"
     ></BetDialog>
@@ -184,6 +183,7 @@ export default class MatchDetails extends Vue {
   selectedSeedId: number = 0;
   oneSeedBet: string = "0";
   twoSeedBet: string = "0";
+  playerBet: string = "0";
 
   match: Match = new Match(
     new BigNumber(this.matchId),
@@ -198,18 +198,16 @@ export default class MatchDetails extends Vue {
     new BigNumber(0)
   );
 
-  private betOneSeed() {
-    this.shoudShowBet = true;
+  private async betOneSeed() {
     this.selectedSeedId = MatchSeedIds.one;
-  }
-
-  private dismissDialog(val: boolean) {
-    this.shoudShowBet = val;
-  }
-
-  private betTwoSeed() {
+    this.playerBet = this.oneSeedBet;
     this.shoudShowBet = true;
+  }
+
+  private async betTwoSeed() {
     this.selectedSeedId = MatchSeedIds.two;
+    this.playerBet = this.twoSeedBet;
+    this.shoudShowBet = true;
   }
 
   private async created() {
@@ -361,6 +359,11 @@ export default class MatchDetails extends Vue {
     this.oneSeedBet = bet.dividedBy(unit).toString(10);
     bet = await this.getBet(this.match.id, MatchSeedIds.two);
     this.twoSeedBet = bet.dividedBy(unit).toString(10);
+    if (this.selectedSeedId == MatchSeedIds.one) {
+      this.playerBet = this.oneSeedBet;
+    } else if (this.selectedSeedId == MatchSeedIds.two) {
+      this.playerBet = this.twoSeedBet;
+    }
   }
 
   private async getBet(matchId: BigNumber, seedId: number) {
@@ -374,6 +377,10 @@ export default class MatchDetails extends Vue {
     const output = await getBetMethod.caller(acc.address).call(matchId, seedId);
     const decoded = output.decoded as any;
     return new BigNumber(decoded["0"]);
+  }
+
+  private dismissDialog(val: boolean) {
+    this.shoudShowBet = val;
   }
 }
 </script>

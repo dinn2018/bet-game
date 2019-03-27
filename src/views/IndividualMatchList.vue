@@ -23,10 +23,10 @@
                 <div class="content_center">Score</div>
               </v-flex>
               <v-flex sm2>
-                <div class="content_center">Bonus Pool(vet)</div>
+                <div class="content_center">Bonus Pool(VET)</div>
               </v-flex>
               <v-flex sm2>
-                <div class="content_center">Your Bet(vet)</div>
+                <div class="content_center">Your Bet(VET)</div>
               </v-flex>
               <v-flex sm2>
                 <div class="content_center">Date</div>

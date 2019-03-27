@@ -5,7 +5,7 @@
         <v-flex xs12 sm12>
           <v-layout row>
             <v-flex xs8 sm8 offset-xs1>
-              <div class="text_left">Total bet for {{seedName}} (vet):</div>
+              <div class="text_left">Total bet for {{seedName}} (VET):</div>
             </v-flex>
             <v-flex xs4 sm4>
               <div class="text_right_bold">{{totalValue}}</div>
@@ -15,7 +15,7 @@
         <v-flex xs12 sm12>
           <v-layout row>
             <v-flex xs8 offset-xs1>
-              <div class="text_left" style="margin-top:-20px;">You have bet for {{seedName}} (vet):</div>
+              <div class="text_left" style="margin-top:-20px;">You have bet for {{seedName}} (VET):</div>
             </v-flex>
             <v-flex xs4>
               <div class="text_right_bold" style="margin-top:-20px;">{{yourBet}}</div>
@@ -28,7 +28,7 @@
             <v-flex xs10>
               <v-text-field
                 single-line
-                placeholder="So how much vet do you want to bet?"
+                placeholder="So how much VET do you want to bet?"
                 v-model="bet"
                 validate-on-blur
                 style="height:60px; margin-top:-20px;"
@@ -77,21 +77,13 @@ export default class BetDialog extends Vue {
   @Prop() showBet!: boolean;
   @Prop() betSeedId!: number;
   @Prop() match!: Match;
-  @Prop() oneBet!: string;
-  @Prop() twoBet!: string;
+  @Prop() yourBet!: string;
   bet: string = "";
-  yourBet = "0";
   show = false;
   @Watch("showBet")
   onShowBetChanged(val: boolean) {
     this.show = val;
-  }
-  @Watch("betSeedId") async onBetSeedIdChanged(seedId: number) {
-    if (seedId === MatchSeedIds.one) {
-      this.yourBet = this.oneBet;
-    } else if (seedId === MatchSeedIds.two) {
-      this.yourBet = this.twoBet;
-    }
+    this.bet = "";
   }
 
   private blanceRules = [

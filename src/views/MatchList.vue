@@ -50,7 +50,7 @@ import { MatchView } from "@/models/Match";
 export default class MatchList extends Vue {
   matchViews: Array<MatchView> = [];
   page = 0;
-  page_size = 10;
+  page_size = 6;
   isLoading = true;
 
   private async created() {

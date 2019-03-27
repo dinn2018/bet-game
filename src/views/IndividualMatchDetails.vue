@@ -5,6 +5,7 @@
       :betSeedId="selectedSeedId"
       :oneBet="oneSeedBet.toString(10)"
       :twoBet="twoSeedBet.toString(10)"
+      :yourBet="playerBet"
       :match="match"
       @dismiss_dialog="dismissDialog"
     ></BetDialog>
@@ -207,7 +208,7 @@
                     <v-progress-circular :size="40" indeterminate color="green"></v-progress-circular>
                   </div>
                   <v-card
-                    v-else-if="hasWithdraw == true"
+                    v-else-if="bonus.isEqualTo(0)"
                     dark
                     class="text_center_bold"
                     style="font-size:18px; display: flex;align-items: center;justify-content: center;"
@@ -299,6 +300,8 @@ export default class IndividualMatchDetails extends Vue {
   selectedSeedId = 0;
   oneSeedBet = zero;
   twoSeedBet = zero;
+  playerBet: string = "0";
+
   match: Match = new Match(
     new BigNumber(this.matchId),
     "",
@@ -314,20 +317,18 @@ export default class IndividualMatchDetails extends Vue {
 
   isLoadingWithdraw = true;
   canIWithdrawBonus = false;
-  hasWithdraw = false;
+  bonus = new BigNumber(0);
 
   private betOneSeed() {
-    this.shoudShowBet = true;
+    this.playerBet = this.oneSeedBet.toString(10);
     this.selectedSeedId = MatchSeedIds.one;
-  }
-
-  private dismissDialog(val: boolean) {
-    this.shoudShowBet = val;
+    this.shoudShowBet = true;
   }
 
   private betTwoSeed() {
-    this.shoudShowBet = true;
     this.selectedSeedId = MatchSeedIds.two;
+    this.playerBet = this.twoSeedBet.toString(10);
+    this.shoudShowBet = true;
   }
 
   private async created() {
@@ -366,7 +367,9 @@ export default class IndividualMatchDetails extends Vue {
       const result = await withdrawBonusTx.request([
         {
           comment:
-            "Withdraw your bouns for the match (" +
+            "Withdraw " +
+            this.bonus.dividedBy(unit).toString(10) +
+            " VET for the match (" +
             this.match.fullTime +
             " " +
             this.match.name +
@@ -385,9 +388,10 @@ export default class IndividualMatchDetails extends Vue {
       });
       console.log("withdrawBonusTx result", result);
       return swal({
-        title: "Withdraw bonus!",
+        title: "Bonus!",
         text:
-          "Bonus will send to " +
+          this.bonus.dividedBy(unit).toString(10) +
+          " VET will send to " +
           main.address +
           " , Check balance of your account",
         icon: "success"
@@ -403,6 +407,11 @@ export default class IndividualMatchDetails extends Vue {
     this.oneSeedBet = bet.dividedBy(unit);
     bet = await this.getBet(this.match.id, MatchSeedIds.two);
     this.twoSeedBet = bet.dividedBy(unit);
+    if (this.selectedSeedId == MatchSeedIds.one) {
+      this.playerBet = this.oneSeedBet.toString(10);
+    } else if (this.selectedSeedId == MatchSeedIds.two) {
+      this.playerBet = this.twoSeedBet.toString(10);
+    }
     if (this.match.status == MatchStatus.finished) {
       if (
         (this.match.oneScore > this.match.twoScore &&
@@ -421,11 +430,11 @@ export default class IndividualMatchDetails extends Vue {
           .caller(acc.address)
           .call(this.matchId);
         const decoded = output.decoded as any;
-        this.hasWithdraw = new BigNumber(decoded["0"]).isEqualTo(zero);
+        this.bonus = new BigNumber(decoded["0"]);
         this.canIWithdrawBonus = true;
       }
-      this.isLoadingWithdraw = false;
     }
+    this.isLoadingWithdraw = false;
   }
 
   private async getBet(matchId: BigNumber, seedId: number) {
@@ -531,14 +540,26 @@ export default class IndividualMatchDetails extends Vue {
   }
 
   private async withdrawBetOneSeed() {
-    await this.withdrawBet(MatchSeedIds.one, this.match.oneSeedName);
+    await this.withdrawBet(
+      MatchSeedIds.one,
+      this.match.oneSeedName,
+      this.oneSeedBet
+    );
   }
 
   private async withdrawBetTwoSeed() {
-    await this.withdrawBet(MatchSeedIds.two, this.match.twoSeedName);
+    await this.withdrawBet(
+      MatchSeedIds.two,
+      this.match.twoSeedName,
+      this.twoSeedBet
+    );
   }
 
-  private async withdrawBet(seedId: MatchSeedIds, seedName: string) {
+  private async withdrawBet(
+    seedId: MatchSeedIds,
+    seedName: string,
+    bet: BigNumber
+  ) {
     try {
       const main = await DB.getMainAccount();
       if (main.address == ZeroAddress) {
@@ -569,7 +590,8 @@ export default class IndividualMatchDetails extends Vue {
       return swal({
         title: "Withdraw bet!",
         text:
-          "Your bet will send to " +
+          bet +
+          "VET will send to " +
           main.address +
           " , Check balance of your account",
         icon: "success"
@@ -626,6 +648,10 @@ export default class IndividualMatchDetails extends Vue {
       console.log(err.message);
     }
     return match;
+  }
+
+  private dismissDialog(val: boolean) {
+    this.shoudShowBet = val;
   }
 }
 </script>
