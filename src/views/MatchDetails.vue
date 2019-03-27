@@ -408,7 +408,7 @@ export default class MatchDetails extends Vue {
   bottom: 0;
 }
 .v-list {
-  height: 480px;
+  height: 540px;
   overflow-y: auto;
 }
 .a {
