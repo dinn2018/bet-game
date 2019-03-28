@@ -418,7 +418,4 @@ export default class MatchDetails extends Vue {
   height: 540px;
   overflow-y: auto;
 }
-.a {
-  background-color: coral;
-}
 </style>

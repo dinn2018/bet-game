@@ -52,6 +52,7 @@ export default class MatchList extends Vue {
   page = 0;
   page_size = 6;
   isLoading = true;
+  p = 0;
 
   private async created() {
     try {
