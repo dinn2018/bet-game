@@ -100,7 +100,7 @@ import { GlobalEvent, Events } from "@/GlobalEvent";
 export default class IndividualMatchCard extends Vue {
   @Prop() private matchView!: MatchView;
   match: Match = new Match(
-    this.matchView.id,
+    zero,
     "",
     0,
     0,
