@@ -124,7 +124,7 @@ export default class IndividualMatchCard extends Vue {
   }
 
   private async reload() {
-    this.match = await this.getMatch(this.match.id);
+    this.match = await this.getMatch(this.matchView.id);
     await this.updateYourBet();
   }
 

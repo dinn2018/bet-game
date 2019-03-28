@@ -99,7 +99,7 @@
             <div class="content_center" style="height:100px;">
               <v-card
                 hover
-                v-bind:class="{'active_stage_color':isInvalidSelected, 'inactive_stage_color': !isInvalidSelected}"
+                v-bind:class="{'active_stage_color':isLockedSelected, 'inactive_stage_color': !isLockedSelected}"
                 style="width:60px;height:60px; display: flex;align-items: center;justify-content: center; border-radius:30px;"
                 @click="lockedList"
               >Locked</v-card>
