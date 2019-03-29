@@ -53,7 +53,7 @@
           v-else
           class="content_center"
           style="font-size:30px;height:720px;color: white;"
-        >No More Matches!</div>
+        >No More Matches</div>
       </v-flex>
       <v-flex xs1 sm1 align-self-center>
         <div v-show="matchViews.length == page_size" class="content_center">
