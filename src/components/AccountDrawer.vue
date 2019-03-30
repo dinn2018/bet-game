@@ -21,8 +21,7 @@ import { Vue, Component, Prop } from "vue-property-decorator";
 import AccountCard from "@/components/AccountCard.vue";
 import DB, { Account, AccountLevel } from "@/database";
 import { GlobalEvent, Events } from "@/GlobalEvent";
-import swal from "sweetalert";
-
+import sweetAlert from "sweetalert";
 @Component({
   components: { AccountCard }
 })
@@ -50,7 +49,7 @@ export default class AccountDrawer extends Vue {
         level: AccountLevel.Main
       };
       await this.commitAccount(acc);
-      return swal({
+      return sweetAlert({
         title: "Register account!",
         text: acc.address,
         icon: "success"

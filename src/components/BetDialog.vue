@@ -70,7 +70,7 @@ import DB, { Account, AccountLevel, ZeroAddress } from "@/database";
 import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import { GlobalEvent, Events } from "@/GlobalEvent";
 import { contractAddr, MethodABI, unit, zero } from "@/config";
-import swal from "sweetalert";
+import sweetAlert from "sweetalert";
 
 @Component
 export default class BetDialog extends Vue {
@@ -126,7 +126,7 @@ export default class BetDialog extends Vue {
     try {
       const acc = await DB.getMainAccount();
       if (acc.address === ZeroAddress) {
-        return swal({
+        return sweetAlert({
           title: "No account available!",
           text: "Please register an account from the menu",
           icon: "warning",
@@ -135,7 +135,7 @@ export default class BetDialog extends Vue {
       }
       const betForSeed = new BigNumber(this.bet);
       if (!betForSeed.isGreaterThanOrEqualTo(100)) {
-        return swal({
+        return sweetAlert({
           title: "Bet is too low!",
           text: "100 VET at least!",
           icon: "warning",
@@ -161,7 +161,7 @@ export default class BetDialog extends Vue {
       });
       console.log("betTx result", result);
       this.dismiss();
-      return swal({
+      return sweetAlert({
         title: this.bet + " VET for " + this.seedName,
         text: "Wait the transaction packed!",
         icon: "success"

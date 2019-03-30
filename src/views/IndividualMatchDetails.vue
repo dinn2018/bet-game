@@ -275,7 +275,6 @@ import DB, { AccountLevel, Account, ZeroAddress } from "@/database";
 import BetDialog from "@/components/BetDialog.vue";
 import BetRecordCard from "@/components/BetRecordCard.vue";
 import { GlobalEvent, Events } from "@/GlobalEvent";
-import swal from "sweetalert";
 import { abi } from "thor-devkit";
 import {
   contractAddr,
@@ -286,6 +285,7 @@ import {
   MethodTopics,
   HttpHost
 } from "@/config";
+import sweetAlert from "sweetalert";
 
 @Component({
   components: { BetDialog, BetRecordCard }
@@ -352,7 +352,7 @@ export default class IndividualMatchDetails extends Vue {
     try {
       const main = await DB.getMainAccount();
       if (main.address == ZeroAddress) {
-        return swal({
+        return sweetAlert({
           title: "No account available!",
           text: "Please register an account from the menu",
           icon: "warning",
@@ -387,7 +387,7 @@ export default class IndividualMatchDetails extends Vue {
         level: AccountLevel.Main
       });
       console.log("withdrawBonusTx result", result);
-      return swal({
+      return sweetAlert({
         title: "Bonus!",
         text:
           this.bonus.dividedBy(unit).toString(10) +
@@ -563,7 +563,7 @@ export default class IndividualMatchDetails extends Vue {
     try {
       const main = await DB.getMainAccount();
       if (main.address == ZeroAddress) {
-        return swal({
+        return sweetAlert({
           title: "No account available!",
           text: "Please register an account from the menu",
           icon: "warning",
@@ -587,7 +587,7 @@ export default class IndividualMatchDetails extends Vue {
         level: AccountLevel.Main
       });
       console.log("withdrawBetTx result", result);
-      return swal({
+      return sweetAlert({
         title: "Withdraw bet!",
         text:
           bet +
