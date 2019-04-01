@@ -227,6 +227,7 @@ export default class IndividualMatchList extends Vue {
 
   private async getMatchViews(status: number) {
     const main = await DB.getMainAccount();
+    console.log("main", main);
     if (main.address === ZeroAddress) {
       return [];
     }
@@ -243,8 +244,8 @@ export default class IndividualMatchList extends Vue {
           (status == 0 ? "" : "&stage=" + status)
       );
       const data = await res.json();
-      for (const m of data) {
-        const match = m.quiz;
+      console.log("data", data);
+      for (const match of data) {
         matchViews.push({
           id: new BigNumber(match._id),
           oneLogo: HttpHost + match.leftLogo,
