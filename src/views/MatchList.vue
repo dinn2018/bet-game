@@ -105,7 +105,7 @@ export default class MatchList extends Vue {
         });
       }
     } catch (err) {
-      console.log(err.message);
+      console.log(err);
     }
     return matches;
   }
