@@ -26,7 +26,7 @@ class Match {
     constructor(id: BigNumber, name: string, startTime: number, status: number, oneSeedName: string, twoSeedName: string, oneScore: number, twoScore: number, oneSeedBonus: BigNumber, twoSeedBonus: BigNumber, view: MatchView = { id: new BigNumber(1), oneLogo: '', twoLogo: '' }) {
         this.id = id;
         this.name = name;
-        this.startTime = startTime;
+        this.startTime = startTime * 1000;
         this.status = status;
         this.oneSeedName = oneSeedName;
         this.twoSeedName = twoSeedName;
