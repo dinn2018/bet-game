@@ -485,38 +485,27 @@ export default class IndividualMatchDetails extends Vue {
     const brs = [];
     for (const event of events) {
       const meta = event.meta as any;
+      let decoded: any;
+      let stakes: BigNumber;
       if (event.topics[0] == MethodTopics.joinBet) {
-        const decoded = joinEvent.decode(event.data, event.topics) as any;
-        const seedId = parseInt(decoded.combatant);
-        const seedName = this.match.seedNameById(seedId);
-        brs.push(
-          new BetRecord(
-            decoded._id,
-            decoded.player,
-            seedId,
-            seedName,
-            new BigNumber(decoded.stakes),
-            meta.blockTimestamp
-          )
-        );
+        decoded = joinEvent.decode(event.data, event.topics);
+        stakes = new BigNumber(decoded.stakes);
       } else {
-        const decoded = withdrawBetEvent.decode(
-          event.data,
-          event.topics
-        ) as any;
-        const seedId = decoded.combatant;
-        const seedName = this.match.seedNameById(seedId);
-        brs.push(
-          new BetRecord(
-            decoded._id,
-            decoded.player,
-            seedId,
-            seedName,
-            new BigNumber(decoded.stakes).negated(),
-            meta.blockTimestamp
-          )
-        );
+        decoded = withdrawBetEvent.decode(event.data, event.topics);
+        stakes = new BigNumber(decoded.stakes).negated();
       }
+      const seedId = parseInt(decoded.combatant);
+      const seedName = this.match.seedNameById(seedId);
+      brs.push(
+        new BetRecord(
+          decoded._id,
+          decoded.player,
+          seedId,
+          seedName,
+          stakes,
+          meta.blockTimestamp
+        )
+      );
     }
     return brs;
   }

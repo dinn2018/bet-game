@@ -244,7 +244,6 @@ export default class IndividualMatchList extends Vue {
           (status == 0 ? "" : "&stage=" + status)
       );
       const data = await res.json();
-      console.log("data", data);
       for (const match of data) {
         matchViews.push({
           id: new BigNumber(match._id),
