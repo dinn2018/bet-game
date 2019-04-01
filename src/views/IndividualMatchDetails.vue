@@ -487,7 +487,7 @@ export default class IndividualMatchDetails extends Vue {
       const meta = event.meta as any;
       if (event.topics[0] == MethodTopics.joinBet) {
         const decoded = joinEvent.decode(event.data, event.topics) as any;
-        const seedId = decoded.combatant;
+        const seedId = parseInt(decoded.combatant);
         const seedName = this.match.seedNameById(seedId);
         brs.push(
           new BetRecord(
