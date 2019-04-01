@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 export let HttpHost = 'https://lol.vebet.app';
 export let unit = new BigNumber(1e18);
 export let zero = new BigNumber(0);
-export let contractAddr = '0x72Ca1aafE8E8f84ABbFba3705c35F084eCd21989';
+export let contractAddr = '0x448e467e0828B03f17171732da5d549FeDcF05eb';
 export let MethodTopics = {
     creat: '0xb8c8322ac4e6ae368af6cfc837a0906e4ee9a35f49ef8b747adcd46dfdac5859',
     joinBet: '0xadd33c52831a0b1c1f1f17c56aa20b5c040473e944e6f3475d38556c779df755',
