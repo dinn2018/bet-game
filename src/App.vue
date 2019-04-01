@@ -3,7 +3,7 @@
     <v-app>
       <AccountDrawer :drawer="drawer"></AccountDrawer>
       <v-toolbar dark app>
-        <v-card-actions style="font-weight: bold;font-size:25px" flat>LegendaryGambling</v-card-actions>
+        <v-card-actions style="font-weight: bold;font-size:25px" flat>Who's Legend</v-card-actions>
         <v-btn @click="backHome">All</v-btn>
         <v-btn @click="individualMatches">your matches</v-btn>
         <v-spacer></v-spacer>
