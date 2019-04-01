@@ -72,10 +72,13 @@ class Match {
         const trueMonth = month < 10 ? '0' + month.toString() : month.toString();
         const day = date.getDate();
         const trueDay = day < 10 ? '0' + day.toString() : day.toString();
-        const hour = date.getHours().toString();
-        const minute = date.getMinutes().toString();
-        return trueMonth + '-' + trueDay + ' ' + hour + ':' + minute;
+        const hour = date.getHours();
+        const trueHour = hour < 10 ? '0' + hour.toString() : hour.toString();
+        const minute = date.getMinutes();
+        const trueMinute = minute < 10 ? '0' + minute.toString() : minute.toString();
+        return trueMonth + '-' + trueDay + ' ' + trueHour + ':' + trueMinute;
     }
+
     get leftTime() {
         const startDate = new Date(this.startTime).getTime();
         const now = Date.now();
