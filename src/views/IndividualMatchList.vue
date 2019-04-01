@@ -9,7 +9,7 @@
           <v-icon style="font-size:20px" @click="lastpage">fas fa-arrow-left</v-icon>
         </div>
       </v-flex>
-      <v-flex>
+      <v-flex xs10 sm10>
         <v-flex sm12>
           <v-card dark>
             <v-layout row>
@@ -37,23 +37,27 @@
             </v-layout>
           </v-card>
         </v-flex>
-        <v-flex v-if="matchViews.length>0" sm12>
-          <v-list id="individual-list" style="background-color: chocolate;">
+        <v-flex sm12>
+          <v-list
+            v-if="matchViews.length>0"
+            id="individual-list"
+            style="background-color: chocolate;"
+          >
             <IndividualMatchCard
               v-for="(mv,i) in matchViews"
               :key="`#${i}-${mv.id.toString()}`"
               :matchView="mv"
             ></IndividualMatchCard>
           </v-list>
+          <div v-else-if="isLoading == true" class="content_center" style="height:720px">
+            <v-progress-circular :size="70" indeterminate color="green"></v-progress-circular>
+          </div>
+          <div
+            v-else
+            class="content_center"
+            style="font-size:30px;height:720px;color: white;"
+          >No More Matches</div>
         </v-flex>
-        <div v-else-if="isLoading == true" class="content_center" style="height:720px">
-          <v-progress-circular :size="70" indeterminate color="green"></v-progress-circular>
-        </div>
-        <div
-          v-else
-          class="content_center"
-          style="font-size:30px;height:720px;color: white;"
-        >No More Matches</div>
       </v-flex>
       <v-flex xs1 sm1 align-self-center>
         <div v-show="matchViews.length == page_size" class="content_center">

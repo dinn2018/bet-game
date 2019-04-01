@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-export let HttpHost = 'http://68.183.161.121:5000';
+export let HttpHost = 'https://lol.vebet.app';
 export let unit = new BigNumber(1e18);
 export let zero = new BigNumber(0);
 export let contractAddr = '0x72Ca1aafE8E8f84ABbFba3705c35F084eCd21989';
