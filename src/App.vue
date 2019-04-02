@@ -4,8 +4,12 @@
       <AccountDrawer :drawer="drawer"></AccountDrawer>
       <v-toolbar dark app>
         <v-card-actions style="font-weight: bold;font-size:25px" flat>Who's Legend</v-card-actions>
-        <v-btn @click="backHome">All</v-btn>
-        <v-btn @click="individualMatches">your matches</v-btn>
+        <v-btn v-bind:class="{'active-tab':isAllSelected }" @click="all">All</v-btn>
+        <v-btn
+          v-bind:class="{'active-tab':isIndividualMatchesSelected }"
+          flat
+          @click="individualMatches"
+        >your matches</v-btn>
         <v-spacer></v-spacer>
         <div>{{mainAccount}}</div>
         <v-toolbar-side-icon @click.stop="clickRightMenu">
@@ -32,18 +36,23 @@ import { zero } from "@/config";
 export default class App extends Vue {
   drawer = false;
   isDestroyed = false;
-
+  isAllSelected = true;
+  isIndividualMatchesSelected = false;
   clickRightMenu() {
     this.drawer = !this.drawer;
   }
 
-  backHome() {
+  all() {
+    this.isAllSelected = true;
+    this.isIndividualMatchesSelected = false;
     this.$router.push({
       name: "root"
     });
   }
 
   individualMatches() {
+    this.isAllSelected = false;
+    this.isIndividualMatchesSelected = true;
     this.$router.push({
       name: "individualmatches"
     });
@@ -90,5 +99,9 @@ body {
 .router-view {
   height: 100%;
   overflow: auto;
+}
+
+.active-tab {
+  background-color: darkgoldenrod !important;
 }
 </style>

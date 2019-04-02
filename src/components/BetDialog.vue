@@ -28,7 +28,7 @@
             <v-flex xs10>
               <v-text-field
                 single-line
-                placeholder="So how much VET do you want to bet?"
+                placeholder="How much VET do you want to bet?"
                 v-model="bet"
                 validate-on-blur
                 style="height:60px; margin-top:-20px;"
@@ -88,10 +88,12 @@ export default class BetDialog extends Vue {
 
   private blanceRules = [
     (value: string) => {
-      const v = new BigNumber(value);
-      const temp = v.multipliedBy(unit);
-      if (!temp.isInteger() || temp.isNegative()) {
-        return `${value} field is invalid, (positive number and limited to 18 decimal places).`;
+      if (value != "") {
+        const v = new BigNumber(value);
+        const temp = v.multipliedBy(unit);
+        if (!temp.isInteger() || temp.isNegative()) {
+          return `${value} field is invalid (positive number and limited to 18 decimal places).`;
+        }
       }
       return "";
     }
