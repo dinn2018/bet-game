@@ -116,7 +116,6 @@
   </div>
 </template>
 <script lang="ts">
-import BigNumber from "bignumber.js";
 import IndividualMatchCard from "@/components/IndividualMatchCard.vue";
 import DB, { ZeroAddress } from "@/database";
 import { Vue, Component, Prop } from "vue-property-decorator";
@@ -231,7 +230,6 @@ export default class IndividualMatchList extends Vue {
 
   private async getMatchViews(status: number) {
     const main = await DB.getMainAccount();
-    console.log("main", main);
     if (main.address === ZeroAddress) {
       return [];
     }

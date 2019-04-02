@@ -315,7 +315,7 @@ export default class MatchDetails extends Vue {
     const getmatchMethod = connex.thor
       .account(contractAddr)
       .method(MethodABI.getMatch);
-    const output = await getmatchMethod.call(new BigNumber(this.matchId));
+    const output = await getmatchMethod.call(parseInt(this.matchId));
     const decoded = output.decoded as any;
     const match = new Match(
       parseInt(decoded.id),

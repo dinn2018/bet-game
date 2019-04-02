@@ -124,7 +124,7 @@ export default class IndividualMatchCard extends Vue {
   }
 
   private async reload() {
-    this.match = await this.getMatch(this.matchView.id);
+    this.match = await this.getMatch();
     await this.updateYourBet();
   }
 
@@ -133,11 +133,11 @@ export default class IndividualMatchCard extends Vue {
     GlobalEvent.$off(Events.TickerStart);
   }
 
-  private async getMatch(id: number) {
+  private async getMatch() {
     const getmatchMethod = connex.thor
       .account(contractAddr)
       .method(MethodABI.getMatch);
-    const output = await getmatchMethod.call(id);
+    const output = await getmatchMethod.call(this.matchView.id);
     const decoded = output.decoded as any;
     return new Match(
       parseInt(decoded.id),
