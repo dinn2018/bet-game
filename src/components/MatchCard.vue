@@ -88,14 +88,14 @@ import BigNumber from "bignumber.js";
 import { Match, MatchView, MatchStatus } from "@/models/Match";
 import DB, { Account, ZeroAddress } from "@/database";
 import { Vue, Component, Prop } from "vue-property-decorator";
-import { contractAddr, MethodABI, unit, zero } from "@/config";
+import { contractAddr, MethodABI, unit } from "@/config";
 import { GlobalEvent, Events } from "@/GlobalEvent";
 
 @Component
 export default class MatchCard extends Vue {
   @Prop() private matchView!: MatchView;
   match: Match = new Match(
-    zero,
+    0,
     "",
     0,
     0,
@@ -128,7 +128,7 @@ export default class MatchCard extends Vue {
     const output = await getmatchMethod.call(this.matchView.id);
     const decoded = output.decoded as any;
     return new Match(
-      new BigNumber(decoded.id),
+      parseInt(decoded.id),
       decoded.gameName,
       parseFloat(decoded.startTime),
       parseInt(decoded.stage),
@@ -139,7 +139,7 @@ export default class MatchCard extends Vue {
       new BigNumber(decoded.leftBet),
       new BigNumber(decoded.rightBet),
       {
-        id: new BigNumber(decoded.id),
+        id: parseInt(decoded.id),
         oneLogo: this.matchView.oneLogo,
         twoLogo: this.matchView.twoLogo
       }

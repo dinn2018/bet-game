@@ -3,14 +3,14 @@ import { unit, zero } from '@/config';
 
 
 interface MatchView {
-    id: BigNumber;
+    id: number;
     oneLogo: string;
     twoLogo: string;
 
 }
 
 class Match {
-    public id: BigNumber;
+    public id: number;
     public name: string;
     public status: number;
     public startTime: number;
@@ -23,7 +23,7 @@ class Match {
     public twoSeedBonus: BigNumber;
 
     // tslint:disable-next-line:max-line-length
-    constructor(id: BigNumber, name: string, startTime: number, status: number, oneSeedName: string, twoSeedName: string, oneScore: number, twoScore: number, oneSeedBonus: BigNumber, twoSeedBonus: BigNumber, view: MatchView = { id: new BigNumber(1), oneLogo: '', twoLogo: '' }) {
+    constructor(id: number, name: string, startTime: number, status: number, oneSeedName: string, twoSeedName: string, oneScore: number, twoScore: number, oneSeedBonus: BigNumber, twoSeedBonus: BigNumber, view: MatchView = { id: 0, oneLogo: '', twoLogo: '' }) {
         this.id = id;
         this.name = name;
         this.startTime = startTime * 1000;

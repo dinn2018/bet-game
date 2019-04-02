@@ -100,7 +100,7 @@ import { GlobalEvent, Events } from "@/GlobalEvent";
 export default class IndividualMatchCard extends Vue {
   @Prop() private matchView!: MatchView;
   match: Match = new Match(
-    zero,
+    0,
     "",
     0,
     0,
@@ -133,14 +133,14 @@ export default class IndividualMatchCard extends Vue {
     GlobalEvent.$off(Events.TickerStart);
   }
 
-  private async getMatch(id: BigNumber) {
+  private async getMatch(id: number) {
     const getmatchMethod = connex.thor
       .account(contractAddr)
       .method(MethodABI.getMatch);
     const output = await getmatchMethod.call(id);
     const decoded = output.decoded as any;
     return new Match(
-      new BigNumber(decoded.id),
+      parseInt(decoded.id),
       decoded.gameName,
       parseFloat(decoded.startTime),
       parseInt(decoded.stage),
@@ -161,7 +161,7 @@ export default class IndividualMatchCard extends Vue {
     this.betTwo = bet.dividedBy(unit).toString(10);
   }
 
-  private async getBet(matchId: BigNumber, seedId: number) {
+  private async getBet(matchId: number, seedId: number) {
     const acc = await DB.getMainAccount();
     if (acc.address === ZeroAddress) {
       return zero;

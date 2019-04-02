@@ -99,7 +99,7 @@ export default class MatchList extends Vue {
       const data = await res.json();
       for (const m of data) {
         matches.push({
-          id: new BigNumber(m._id),
+          id: parseInt(m._id),
           oneLogo: HttpHost + m.leftLogo,
           twoLogo: HttpHost + m.rightLogo
         });

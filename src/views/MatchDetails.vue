@@ -186,7 +186,7 @@ export default class MatchDetails extends Vue {
   playerBet: string = "0";
 
   match: Match = new Match(
-    new BigNumber(this.matchId),
+    parseInt(this.matchId),
     "",
     0,
     0,
@@ -318,7 +318,7 @@ export default class MatchDetails extends Vue {
     const output = await getmatchMethod.call(new BigNumber(this.matchId));
     const decoded = output.decoded as any;
     const match = new Match(
-      new BigNumber(decoded.id),
+      parseInt(decoded.id),
       decoded.gameName,
       parseFloat(decoded.startTime),
       parseInt(decoded.stage),
@@ -333,7 +333,7 @@ export default class MatchDetails extends Vue {
       const res = await this.$http.get(HttpHost + "/api/quiz/" + this.matchId);
       const data = await res.json();
       match.view = {
-        id: new BigNumber(decoded.id),
+        id: parseInt(decoded.id),
         oneLogo: HttpHost + data.leftLogo,
         twoLogo: HttpHost + data.rightLogo
       };
@@ -355,7 +355,7 @@ export default class MatchDetails extends Vue {
     }
   }
 
-  private async getBet(matchId: BigNumber, seedId: number) {
+  private async getBet(matchId: number, seedId: number) {
     const acc = await DB.getMainAccount();
     if (acc.address === ZeroAddress) {
       return zero;

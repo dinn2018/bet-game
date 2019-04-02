@@ -250,7 +250,7 @@ export default class IndividualMatchList extends Vue {
       const data = await res.json();
       for (const match of data) {
         matchViews.push({
-          id: new BigNumber(match._id),
+          id: parseInt(match._id),
           oneLogo: HttpHost + match.leftLogo,
           twoLogo: HttpHost + match.rightLogo
         });
