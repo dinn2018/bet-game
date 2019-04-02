@@ -4,9 +4,9 @@
       <AccountDrawer :drawer="drawer"></AccountDrawer>
       <v-toolbar dark app>
         <v-card-actions style="font-weight: bold;font-size:25px" flat>Who's Legend</v-card-actions>
-        <v-btn v-bind:class="{'active-tab':isAllSelected }" @click="all">All</v-btn>
+        <v-btn v-bind:class="{'active-tab':selected == 0 }" flat @click="all">All</v-btn>
         <v-btn
-          v-bind:class="{'active-tab':isIndividualMatchesSelected }"
+          v-bind:class="{'active-tab':selected == 1 }"
           flat
           @click="individualMatches"
         >your matches</v-btn>
@@ -36,23 +36,20 @@ import { zero } from "@/config";
 export default class App extends Vue {
   drawer = false;
   isDestroyed = false;
-  isAllSelected = true;
-  isIndividualMatchesSelected = false;
+  selected = 0;
   clickRightMenu() {
     this.drawer = !this.drawer;
   }
 
   all() {
-    this.isAllSelected = true;
-    this.isIndividualMatchesSelected = false;
+    this.selected = 0;
     this.$router.push({
       name: "root"
     });
   }
 
   individualMatches() {
-    this.isAllSelected = false;
-    this.isIndividualMatchesSelected = true;
+    this.selected = 1;
     this.$router.push({
       name: "individualmatches"
     });

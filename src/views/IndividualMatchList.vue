@@ -73,7 +73,7 @@
             <div class="content_center" style="height:100px;">
               <v-card
                 hover
-                v-bind:class="{'active_stage_color':isAllSelected, 'inactive_stage_color': !isAllSelected}"
+                v-bind:class="{'active_stage_color':selectedMatchStatus == 0, 'inactive_stage_color': selectedMatchStatus != 0}"
                 style="width:60px;height:60px; display: flex;align-items: center;justify-content: center; border-radius:30px;"
                 @click="allList"
               >All</v-card>
@@ -83,7 +83,7 @@
             <div class="content_center" style="height:100px;">
               <v-card
                 hover
-                v-bind:class="{'active_stage_color':isActiveSelected , 'inactive_stage_color': !isActiveSelected}"
+                v-bind:class="{'active_stage_color':selectedMatchStatus == 1 , 'inactive_stage_color': selectedMatchStatus != 1}"
                 style="width:60px;height:60px; display: flex;align-items: center;justify-content: center; border-radius:30px;"
                 @click="activeList"
               >Active</v-card>
@@ -94,7 +94,7 @@
               <v-card
                 hover
                 style="width:60px;height:60px; display: flex;align-items: center;justify-content: center; border-radius:30px;"
-                v-bind:class="{'active_stage_color':isOverSelected , 'inactive_stage_color': !isOverSelected}"
+                v-bind:class="{'active_stage_color':selectedMatchStatus == 4 , 'inactive_stage_color': selectedMatchStatus != 4}"
                 @click="overedList"
               >Overd</v-card>
             </div>
@@ -103,7 +103,7 @@
             <div class="content_center" style="height:100px;">
               <v-card
                 hover
-                v-bind:class="{'active_stage_color':isLockedSelected, 'inactive_stage_color': !isLockedSelected}"
+                v-bind:class="{'active_stage_color':selectedMatchStatus == 2, 'inactive_stage_color': selectedMatchStatus != 2}"
                 style="width:60px;height:60px; display: flex;align-items: center;justify-content: center; border-radius:30px;"
                 @click="lockedList"
               >Locked</v-card>
@@ -139,16 +139,10 @@ export default class IndividualMatchList extends Vue {
   page = 0;
   page_size = 10;
   isLoading = true;
-
-  isOverSelected = false;
-  isActiveSelected = true;
-  isLockedSelected = false;
-  isAllSelected = false;
   selectedMatchStatus = MatchStatus.active;
 
   private async created() {
     try {
-      this.isActiveSelected = true;
       await this.loadMatchViews();
       GlobalEvent.$on(Events.AccountChanged, async () => {
         this.page = 0;
@@ -168,10 +162,6 @@ export default class IndividualMatchList extends Vue {
 
   private async overedList() {
     console.log("overedList");
-    this.isOverSelected = true;
-    this.isActiveSelected = false;
-    this.isLockedSelected = false;
-    this.isAllSelected = false;
     this.page = 0;
     this.selectedMatchStatus = MatchStatus.finished;
     await this.loadMatchViews();
@@ -179,10 +169,6 @@ export default class IndividualMatchList extends Vue {
 
   private async activeList() {
     console.log("activeList");
-    this.isOverSelected = false;
-    this.isActiveSelected = true;
-    this.isLockedSelected = false;
-    this.isAllSelected = false;
     this.page = 0;
     this.selectedMatchStatus = MatchStatus.active;
     await this.loadMatchViews();
@@ -190,10 +176,6 @@ export default class IndividualMatchList extends Vue {
 
   private async lockedList() {
     console.log("invalidList");
-    this.isOverSelected = false;
-    this.isActiveSelected = false;
-    this.isLockedSelected = true;
-    this.isAllSelected = false;
     this.page = 0;
     this.selectedMatchStatus = MatchStatus.locked;
     await this.loadMatchViews();
@@ -201,10 +183,6 @@ export default class IndividualMatchList extends Vue {
 
   private async allList() {
     console.log("allList");
-    this.isOverSelected = false;
-    this.isActiveSelected = false;
-    this.isLockedSelected = false;
-    this.isAllSelected = true;
     this.page = 0;
     this.selectedMatchStatus = 0;
     await this.loadMatchViews();
