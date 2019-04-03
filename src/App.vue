@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <v-app>
+    <v-app v-if="isMainNet == true">
       <AccountDrawer :drawer="drawer"></AccountDrawer>
       <v-toolbar dark app>
         <v-card-actions style="font-weight: bold;font-size:25px" flat>Who's Legend</v-card-actions>
@@ -20,6 +20,13 @@
         <router-view></router-view>
       </v-content>
     </v-app>
+    <v-app v-else>
+      <v-content
+        style="text-align: center;display: flex;align-items: center;justify-content: center;font-weight: bold;background-color: chocolate;"
+      >
+        <div style="color:white">Not supported on current network, please check your network</div>
+      </v-content>
+    </v-app>
   </div>
 </template>
 <script lang="ts">
@@ -27,7 +34,7 @@ import { Vue, Component } from "vue-property-decorator";
 import AccountDrawer from "@/components/AccountDrawer.vue";
 import DB, { ZeroAddress } from "@/database";
 import { GlobalEvent, Events } from "@/GlobalEvent";
-import { zero } from "@/config";
+import { zero, mainNet } from "@/config";
 @Component({
   components: {
     AccountDrawer
@@ -37,6 +44,8 @@ export default class App extends Vue {
   drawer = false;
   isDestroyed = false;
   selected = 0;
+  isMainNet = false;
+
   clickRightMenu() {
     this.drawer = !this.drawer;
   }
@@ -64,16 +73,20 @@ export default class App extends Vue {
   }
 
   async created() {
-    this.$router.push({
-      name: "root"
-    });
-    let ticker = connex.thor.ticker();
-    do {
-      console.log("app emit TickerStart");
-      GlobalEvent.$emit(Events.TickerStart);
-      GlobalEvent.$emit(Events.AccountTickerStart);
-      await ticker.next();
-    } while (!this.isDestroyed);
+    let genesis = await connex.thor.genesis.id;
+    this.isMainNet = genesis == mainNet;
+    if (this.isMainNet) {
+      this.$router.push({
+        name: "root"
+      });
+      let ticker = connex.thor.ticker();
+      do {
+        console.log("app emit TickerStart");
+        GlobalEvent.$emit(Events.TickerStart);
+        GlobalEvent.$emit(Events.AccountTickerStart);
+        await ticker.next();
+      } while (!this.isDestroyed);
+    }
   }
 
   destroyed() {
