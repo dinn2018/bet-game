@@ -144,7 +144,7 @@ export default class IndividualMatchList extends Vue {
   page = 0;
   page_size = 10;
   isLoading = true;
-  selectedMatchStatus = MatchStatus.active;
+  selectedMatchStatus = 0;
   hasAccount = false;
 
   private async created() {
