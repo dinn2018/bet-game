@@ -91,7 +91,7 @@ class Match {
         // tslint:disable-next-line:radix
         const hours = parseInt((interval / 3600 % 24).toString());
         // tslint:disable-next-line:radix
-        const minutes = parseInt((interval / 60 % 24).toString());
+        const minutes = parseInt((interval / 60 % 60).toString());
         if (days > 0) {
             return days.toString() + 'Days ' + hours.toString() + 'Hours ' + minutes.toString() + 'minutes left';
         }

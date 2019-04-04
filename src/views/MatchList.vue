@@ -13,7 +13,7 @@
         <v-item-group v-if="matchViews.length > 0">
           <v-container fluid grid-list-md>
             <v-layout wrap>
-              <v-flex xs12 md6 v-for="(mv,i) in matchViews" :key="`${i}-${mv.id.toString()}`">
+              <v-flex xs12 sm6 v-for="(mv,i) in matchViews" :key="`${i}-${mv.id.toString()}`">
                 <MatchCard :matchView="mv"></MatchCard>
               </v-flex>
             </v-layout>
