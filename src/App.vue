@@ -9,7 +9,8 @@
           v-bind:class="{'active-tab':selected == 1 }"
           flat
           @click="individualMatches"
-        >your matches</v-btn>
+        >Your Matches</v-btn>
+        <v-btn v-bind:class="{'active-tab':selected == 2 }" flat @click="about">About</v-btn>
         <v-spacer></v-spacer>
         <div>{{mainAccount}}</div>
         <v-toolbar-side-icon @click.stop="clickRightMenu">
@@ -63,7 +64,12 @@ export default class App extends Vue {
       name: "individualmatches"
     });
   }
-
+  about() {
+    this.selected = 2;
+    this.$router.push({
+      name: "about"
+    });
+  }
   get mainAccount() {
     let addr = this.$store.state.mainAccount.address;
     if (addr === "") {

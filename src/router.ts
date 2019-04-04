@@ -4,6 +4,9 @@ import MatchList from './views/MatchList.vue';
 import IndividualMatchList from './views/IndividualMatchList.vue';
 import MatchDetails from './views/MatchDetails.vue';
 import IndividualMatchDetails from './views/IndividualMatchDetails.vue';
+import About from './views/About.vue';
+
+
 Vue.use(Router);
 
 const router = new Router({
@@ -35,6 +38,11 @@ const router = new Router({
             component: IndividualMatchDetails,
             path: '/individualmatches/:matchId',
             props: true,
+        },
+        {
+            name: 'about',
+            component: About,
+            path: '/about',
         },
     ],
 });
