@@ -39,7 +39,8 @@
           <v-flex xs8 sm8>
             <div
               class="text_left_bold"
-            >Step2. choose a combatant which your think will win, and bet vet for it</div>
+              style="height:150px"
+            >Step2. choose a combatant which you think will win, and bet VET for it (100 VET at least), if the combatant won, more VET you bet more bonus you will get</div>
           </v-flex>
           <v-flex xs2 sm2></v-flex>
         </v-layout>
