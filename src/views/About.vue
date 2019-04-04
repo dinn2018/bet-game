@@ -62,7 +62,7 @@
           <v-flex xs8 sm8>
             <div
               class="text_left_bold"
-            >Step3. check the match that you choosed and notice that the match will automatically locked be</div>
+            >Step3. check the match that you choosed and notice that the match will automatically be locked one hour before the start</div>
           </v-flex>
           <v-flex xs2 sm2></v-flex>
         </v-layout>
