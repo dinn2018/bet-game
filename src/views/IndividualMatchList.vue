@@ -79,7 +79,7 @@
               <v-card
                 hover
                 v-bind:class="{'active_stage_color':selectedMatchStatus == 0, 'inactive_stage_color': selectedMatchStatus != 0}"
-                style="width:60px;height:60px; display: flex;align-items: center;justify-content: center; border-radius:30px;"
+                style="width:80px;height:80px; display: flex;align-items: center;justify-content: center; border-radius:40px;"
                 @click="allList"
               >All</v-card>
             </div>
@@ -89,7 +89,7 @@
               <v-card
                 hover
                 v-bind:class="{'active_stage_color':selectedMatchStatus == 1 , 'inactive_stage_color': selectedMatchStatus != 1}"
-                style="width:60px;height:60px; display: flex;align-items: center;justify-content: center; border-radius:30px;"
+                style="width:80px;height:80px; display: flex;align-items: center;justify-content: center; border-radius:40px;"
                 @click="activeList"
               >Active</v-card>
             </div>
@@ -98,10 +98,10 @@
             <div class="content_center" style="height:100px;">
               <v-card
                 hover
-                style="width:60px;height:60px; display: flex;align-items: center;justify-content: center; border-radius:30px;"
+                style="width:80px;height:80px; display: flex;align-items: center;justify-content: center; border-radius:40px;"
                 v-bind:class="{'active_stage_color':selectedMatchStatus == 4 , 'inactive_stage_color': selectedMatchStatus != 4}"
-                @click="overedList"
-              >Overd</v-card>
+                @click="finishedList"
+              >Finished</v-card>
             </div>
           </v-flex>
           <v-flex xs3 sm3>
@@ -109,7 +109,7 @@
               <v-card
                 hover
                 v-bind:class="{'active_stage_color':selectedMatchStatus == 2, 'inactive_stage_color': selectedMatchStatus != 2}"
-                style="width:60px;height:60px; display: flex;align-items: center;justify-content: center; border-radius:30px;"
+                style="width:80px;height:80px; display: flex;align-items: center;justify-content: center; border-radius:40px;"
                 @click="lockedList"
               >Locked</v-card>
             </div>
@@ -166,8 +166,8 @@ export default class IndividualMatchList extends Vue {
     this.isLoading = false;
   }
 
-  private async overedList() {
-    console.log("overedList");
+  private async finishedList() {
+    console.log("finishedList");
     this.page = 0;
     this.selectedMatchStatus = MatchStatus.finished;
     await this.loadMatchViews();
