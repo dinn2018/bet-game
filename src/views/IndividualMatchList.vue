@@ -53,6 +53,11 @@
             <v-progress-circular :size="70" indeterminate color="green"></v-progress-circular>
           </div>
           <div
+            v-else-if="hasAccount == false"
+            class="content_center"
+            style="font-size:30px;height:720px;color: white;"
+          >Register an account first</div>
+          <div
             v-else
             class="content_center"
             style="font-size:30px;height:720px;color: white;"
@@ -140,6 +145,7 @@ export default class IndividualMatchList extends Vue {
   page_size = 10;
   isLoading = true;
   selectedMatchStatus = MatchStatus.active;
+  hasAccount = false;
 
   private async created() {
     try {
@@ -208,7 +214,8 @@ export default class IndividualMatchList extends Vue {
 
   private async getMatchViews(status: number) {
     const main = await DB.getMainAccount();
-    if (main.address === ZeroAddress) {
+    this.hasAccount = main.address !== ZeroAddress;
+    if (!this.hasAccount) {
       return [];
     }
     const matchViews: Array<MatchView> = [];
@@ -224,6 +231,7 @@ export default class IndividualMatchList extends Vue {
           (status == 0 ? "" : "&stage=" + status)
       );
       const data = await res.json();
+      console.log(data);
       for (const match of data) {
         matchViews.push({
           id: parseInt(match._id),
