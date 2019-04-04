@@ -93,13 +93,13 @@ class Match {
         // tslint:disable-next-line:radix
         const minutes = parseInt((interval / 60 % 60).toString());
         if (days > 0) {
-            return days.toString() + 'Days ' + hours.toString() + 'Hours ' + minutes.toString() + 'minutes left';
+            return days.toString() + 'Days ' + hours.toString() + 'Hours ' + minutes.toString() + 'Minutes left';
         }
         if (hours > 0) {
-            return hours.toString() + 'Hours ' + minutes.toString() + 'minutes left';
+            return hours.toString() + 'Hours ' + minutes.toString() + 'Minutes left';
         }
         if (minutes > 0) {
-            return minutes.toString() + 'minutes left';
+            return minutes.toString() + 'Minutes left';
         }
     }
     get fullTime() {
