@@ -200,12 +200,17 @@
                 <v-flex xs6 sm6>
                   <div class="text_center_bold">This match is over!</div>
                 </v-flex>
-                <v-flex xs6 sm6 style="height:60px">
+                <v-flex xs6 sm6 style="height:70px">
                   <div
                     v-if="isLoadingWithdraw == true"
-                    style="display: flex;align-items: center;justify-content: center;"
+                    style="font-size:18px; display: flex;align-items: center;justify-content: center;"
                   >
-                    <v-progress-circular :size="40" indeterminate color="green"></v-progress-circular>
+                    <v-progress-circular
+                      :size="40"
+                      style="height:70px;"
+                      indeterminate
+                      color="green"
+                    ></v-progress-circular>
                   </div>
                   <v-card
                     v-else-if="bonus.isEqualTo(0)"
@@ -217,7 +222,7 @@
                     block
                     @click="withdrawBonus"
                     class="text_center_bold"
-                    style="height:70px;background-color: coral;margin-top:0px;"
+                    style="height:100%;background-color: coral;margin-top:0px;"
                     hover
                     dark
                     v-else-if="canWithdrawBonus == true"
