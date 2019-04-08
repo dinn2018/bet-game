@@ -373,7 +373,7 @@ export default class IndividualMatchDetails extends Vue {
         {
           comment:
             "Withdraw " +
-            this.bonus.dividedBy(unit).toString(10) +
+            this.bonus.toString(10) +
             " VET for the match (" +
             this.match.fullTime +
             " " +
@@ -395,7 +395,7 @@ export default class IndividualMatchDetails extends Vue {
       return sweetAlert({
         title: "Bonus!",
         text:
-          this.bonus.dividedBy(unit).toString(10) +
+          this.bonus.toString(10) +
           " VET will send to " +
           main.address +
           " , Check balance of your account",
