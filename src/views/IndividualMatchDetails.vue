@@ -86,7 +86,7 @@
         <v-layout row>
           <v-flex xs1 sm1></v-flex>
           <v-flex xs10 sm10>
-            <v-card dark v-if="match.status == 1">
+            <v-card tile flat dark v-if="match.status == 1">
               <v-layout row>
                 <v-flex xs4 sm4>
                   <v-layout column>
@@ -197,10 +197,10 @@
             </v-card>
             <v-card dark tile v-else-if="match.status == 4">
               <v-layout row>
-                <v-flex xs8 sm8>
+                <v-flex xs6 sm6>
                   <div class="text_center_bold">This match is over!</div>
                 </v-flex>
-                <v-flex xs4 sm4 style="height:60px">
+                <v-flex xs6 sm6 style="height:60px">
                   <div
                     v-if="isLoadingWithdraw == true"
                     style="display: flex;align-items: center;justify-content: center;"
@@ -214,14 +214,14 @@
                     style="font-size:18px; display: flex;align-items: center;justify-content: center;"
                   >You have withdrew the bonus</v-card>
                   <v-btn
-                    dark
                     block
                     @click="withdrawBonus"
                     class="text_center_bold"
-                    style="height:100%;background-color: coral;margin-top:0px;"
+                    style="height:70px;background-color: coral;margin-top:0px;"
                     hover
-                    v-else-if="canIWithdrawBonus == true"
-                  >Withdraw Bonus</v-btn>
+                    dark
+                    v-else-if="canWithdrawBonus == true"
+                  >Withdraw Bonus ({{bonus.toFixed(2)}})</v-btn>
                   <v-card
                     dark
                     class="text_center_bold"
@@ -316,7 +316,7 @@ export default class IndividualMatchDetails extends Vue {
   );
 
   isLoadingWithdraw = true;
-  canIWithdrawBonus = false;
+  canWithdrawBonus = false;
   bonus = new BigNumber(0);
 
   private betOneSeed() {
@@ -354,7 +354,7 @@ export default class IndividualMatchDetails extends Vue {
       if (main.address == ZeroAddress) {
         return sweetAlert({
           title: "No account available!",
-          text: "Please register an account from the menu",
+          text: "Please register an account in the menu",
           icon: "warning",
           dangerMode: true
         });
@@ -402,7 +402,6 @@ export default class IndividualMatchDetails extends Vue {
   }
 
   private async updateYourBet() {
-    this.isLoadingWithdraw = true;
     let bet = await this.getBet(this.match.id, MatchSeedIds.one);
     this.oneSeedBet = bet.dividedBy(unit);
     bet = await this.getBet(this.match.id, MatchSeedIds.two);
@@ -430,8 +429,8 @@ export default class IndividualMatchDetails extends Vue {
           .caller(acc.address)
           .call(this.matchId);
         const decoded = output.decoded as any;
-        this.bonus = new BigNumber(decoded["0"]);
-        this.canIWithdrawBonus = true;
+        this.bonus = new BigNumber(decoded["0"]).dividedBy(unit);
+        this.canWithdrawBonus = true;
       }
     }
     this.isLoadingWithdraw = false;
@@ -611,7 +610,7 @@ export default class IndividualMatchDetails extends Vue {
     const getmatchMethod = connex.thor
       .account(contractAddr)
       .method(MethodABI.getMatch);
-    const output = await getmatchMethod.call(new BigNumber(this.matchId));
+    const output = await getmatchMethod.call(parseInt(this.matchId));
     const decoded = output.decoded as any;
     const match = new Match(
       parseInt(decoded.id),

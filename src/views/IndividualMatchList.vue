@@ -56,7 +56,7 @@
             v-else-if="hasAccount == false"
             class="content_center"
             style="font-size:30px;height:720px;color: white;"
-          >Register an account first</div>
+          >Please register an account in the menu</div>
           <div
             v-else
             class="content_center"
