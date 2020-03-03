@@ -1,15 +1,7 @@
 <template>
   <div style="background-color: chocolate;">
-    <v-layout row>
-      <v-flex xs1 sm1 align-self-center>
-        <div
-          v-show="page > 0 && ((matchViews.length > 0) ||( isLoading == false && matchViews.length == 0))"
-          class="content_center"
-        >
-          <v-icon style="font-size:20px" @click="lastpage">fas fa-arrow-left</v-icon>
-        </div>
-      </v-flex>
-      <v-flex align-self-center>
+    <v-layout column>
+      <v-flex xs12 sm12>
         <v-item-group v-if="matchViews.length > 0">
           <v-container fluid grid-list-md>
             <v-layout wrap>
@@ -28,10 +20,14 @@
           style="font-size:30px;height:720px;color: white;"
         >NO More Matches</div>
       </v-flex>
-      <v-flex xs1 sm1 align-self-center>
-        <div v-show="matchViews.length == page_size" class="content_center">
-          <v-icon style="font-size:25px" @click="nextpage">fas fa-arrow-right</v-icon>
-        </div>
+      <v-flex align-self-center xs12 sm12>
+        <Pagination
+          :totalItems="count"
+          :page="page"
+          :itemsPerPage="page_size"
+          :maxVisiblePages="5"
+          @page-change="pageChanged"
+        ></Pagination>
       </v-flex>
     </v-layout>
   </div>
@@ -40,19 +36,20 @@
 import BigNumber from "bignumber.js";
 import { contractAddr, MethodTopics, EventABI, HttpHost } from "@/config";
 import MatchCard from "@/components/MatchCard.vue";
+import Pagination from "@/components/Pagination.vue";
 import { Vue, Component, Prop } from "vue-property-decorator";
 import { GlobalEvent, Events } from "@/GlobalEvent";
 import { MatchView } from "@/models/Match";
 
 @Component({
-  components: { MatchCard }
+  components: { MatchCard, Pagination }
 })
 export default class MatchList extends Vue {
   matchViews: Array<MatchView> = [];
   page = 0;
   page_size = 6;
   isLoading = true;
-  p = 0;
+  count = 0;
 
   private async created() {
     try {
@@ -73,19 +70,6 @@ export default class MatchList extends Vue {
     GlobalEvent.$off(Events.TickerStart);
   }
 
-  private async lastpage() {
-    this.page--;
-    if (this.page < 0) {
-      this.page = 0;
-    }
-    await this.loadMatchViews();
-  }
-
-  private async nextpage() {
-    this.page++;
-    await this.loadMatchViews();
-  }
-
   private async getMatchViews() {
     const matches: Array<MatchView> = [];
     try {
@@ -97,7 +81,8 @@ export default class MatchList extends Vue {
           this.page_size
       );
       const data = await res.json();
-      for (const m of data) {
+      this.count = data.count;
+      for (const m of data.data) {
         matches.push({
           id: parseInt(m._id),
           oneLogo: HttpHost + m.leftLogo,
@@ -120,6 +105,12 @@ export default class MatchList extends Vue {
   private async reloadMatchViews() {
     this.page = 0;
     this.matchViews = await this.getMatchViews();
+  }
+
+  async pageChanged(page: number) {
+    console.log(page);
+    this.page = page;
+    await this.loadMatchViews();
   }
 }
 </script>

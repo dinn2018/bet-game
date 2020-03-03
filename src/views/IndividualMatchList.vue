@@ -1,127 +1,130 @@
 <template>
   <div style="background-color: chocolate;">
     <v-layout row fluid>
-      <v-flex xs1 sm1 align-self-center>
-        <div
-          v-show="page > 0 && ((matchViews.length > 0) ||( isLoading == false && matchViews.length == 0 ))"
-          class="content_center"
-        >
-          <v-icon style="font-size:20px" @click="lastpage">fas fa-arrow-left</v-icon>
-        </div>
-      </v-flex>
-      <v-flex xs10 sm10>
-        <v-flex sm12>
-          <v-card dark>
-            <v-layout row>
-              <v-flex sm2>
-                <div class="content_center">Match Name</div>
-              </v-flex>
-              <v-flex sm2>
-                <div class="content_center">Combatants</div>
-              </v-flex>
-              <v-flex sm1>
-                <div class="content_center">Score</div>
-              </v-flex>
-              <v-flex sm2>
-                <div class="content_center">Bonus Pool(VET)</div>
-              </v-flex>
-              <v-flex sm2>
-                <div class="content_center">Your Bet(VET)</div>
-              </v-flex>
-              <v-flex sm2>
-                <div class="content_center">Date</div>
-              </v-flex>
-              <v-flex sm1 align-self-center>
-                <div class="content_center">Stage</div>
-              </v-flex>
-            </v-layout>
-          </v-card>
-        </v-flex>
-        <v-flex sm12>
-          <v-list
-            v-if="matchViews.length>0"
-            id="individual-list"
-            style="background-color: chocolate;"
+      <v-flex xs1 sm1>
+        <v-layout column d-flex align-center fill-height>
+          <v-flex
+            style="text-align: center;display: flex;align-items: center;justify-content: center;"
           >
-            <IndividualMatchCard
-              v-for="(mv,i) in matchViews"
-              :key="`#${i}-${mv.id.toString()}`"
-              :matchView="mv"
-            ></IndividualMatchCard>
-          </v-list>
-          <div v-else-if="isLoading == true" class="content_center" style="height:720px">
-            <v-progress-circular :size="70" indeterminate color="green"></v-progress-circular>
-          </div>
-          <div
-            v-else-if="hasAccount == false"
-            class="content_center"
-            style="font-size:30px;height:720px;color: white;"
-          >Please register an account in the menu</div>
-          <div
-            v-else
-            class="content_center"
-            style="font-size:30px;height:720px;color: white;"
-          >No More Matches</div>
-        </v-flex>
-      </v-flex>
-      <v-flex xs1 sm1 align-self-center>
-        <div v-show="matchViews.length == page_size" class="content_center">
-          <v-icon style="font-size:25px" @click="nextpage">fas fa-arrow-right</v-icon>
-        </div>
-      </v-flex>
-    </v-layout>
-    <v-layout row>
-      <v-flex xs2 sm2></v-flex>
-      <v-flex xs8 sm8>
-        <v-layout row>
-          <v-flex xs3 sm3>
-            <div class="content_center" style="height:100px;">
-              <v-card
-                hover
-                v-bind:class="{'active_stage_color':selectedMatchStatus == 0, 'inactive_stage_color': selectedMatchStatus != 0}"
-                style="width:80px;height:80px; display: flex;align-items: center;justify-content: center; border-radius:40px;"
-                @click="allList"
-              >All</v-card>
-            </div>
-          </v-flex>
-          <v-flex xs3 sm3>
-            <div class="content_center" style="height:100px;">
-              <v-card
-                hover
-                v-bind:class="{'active_stage_color':selectedMatchStatus == 1 , 'inactive_stage_color': selectedMatchStatus != 1}"
-                style="width:80px;height:80px; display: flex;align-items: center;justify-content: center; border-radius:40px;"
-                @click="activeList"
-              >Active</v-card>
-            </div>
-          </v-flex>
-          <v-flex xs3 sm3>
-            <div class="content_center" style="height:100px;">
-              <v-card
-                hover
-                style="width:80px;height:80px; display: flex;align-items: center;justify-content: center; border-radius:40px;"
-                v-bind:class="{'active_stage_color':selectedMatchStatus == 4 , 'inactive_stage_color': selectedMatchStatus != 4}"
-                @click="finishedList"
-              >Finished</v-card>
-            </div>
-          </v-flex>
-          <v-flex xs3 sm3>
-            <div class="content_center" style="height:100px;">
-              <v-card
-                hover
-                v-bind:class="{'active_stage_color':selectedMatchStatus == 2, 'inactive_stage_color': selectedMatchStatus != 2}"
-                style="width:80px;height:80px; display: flex;align-items: center;justify-content: center; border-radius:40px;"
-                @click="lockedList"
-              >Locked</v-card>
+            <div style="height:400px">
+              <v-layout column>
+                <v-flex>
+                  <div class="content_center" style="height:100px;">
+                    <v-card
+                      hover
+                      v-bind:class="{'active_stage_color':selectedMatchStatus == 0, 'inactive_stage_color': selectedMatchStatus != 0}"
+                      style="width:50px;height:50px; display: flex;align-items: center;justify-content: center; border-radius:25px;font-size:10px"
+                      @click="allList"
+                    >All</v-card>
+                  </div>
+                </v-flex>
+                <v-flex>
+                  <div class="content_center" style="height:100px;">
+                    <v-card
+                      hover
+                      v-bind:class="{'active_stage_color':selectedMatchStatus == 1 , 'inactive_stage_color': selectedMatchStatus != 1}"
+                      style="width:50px;height:50px; display: flex;align-items: center;justify-content: center; border-radius:25px;font-size:10px"
+                      @click="activeList"
+                    >Active</v-card>
+                  </div>
+                </v-flex>
+                <v-flex>
+                  <div class="content_center" style="height:100px;">
+                    <v-card
+                      hover
+                      style="width:50px;height:50px; display: flex;align-items: center;justify-content: center; border-radius:25px;font-size:10px"
+                      v-bind:class="{'active_stage_color':selectedMatchStatus == 4 , 'inactive_stage_color': selectedMatchStatus != 4}"
+                      @click="finishedList"
+                    >Finished</v-card>
+                  </div>
+                </v-flex>
+                <v-flex>
+                  <div class="content_center" style="height:100px;">
+                    <v-card
+                      hover
+                      v-bind:class="{'active_stage_color':selectedMatchStatus == 2, 'inactive_stage_color': selectedMatchStatus != 2}"
+                      style="width:50px;height:50px; display: flex;align-items: center;justify-content: center; border-radius:25px;font-size:10px"
+                      @click="lockedList"
+                    >Locked</v-card>
+                  </div>
+                </v-flex>
+              </v-layout>
             </div>
           </v-flex>
         </v-layout>
       </v-flex>
-      <v-flex xs2 sm2></v-flex>
+      <v-flex xs10 sm10>
+        <v-layout column>
+          <v-flex xs12 sm12>
+            <v-card dark>
+              <v-layout row>
+                <v-flex sm2>
+                  <div class="content_center">Match Name</div>
+                </v-flex>
+                <v-flex sm2>
+                  <div class="content_center">Combatants</div>
+                </v-flex>
+                <v-flex sm1>
+                  <div class="content_center">Score</div>
+                </v-flex>
+                <v-flex sm2>
+                  <div class="content_center">Bonus Pool(VET)</div>
+                </v-flex>
+                <v-flex sm2>
+                  <div class="content_center">Your Bet(VET)</div>
+                </v-flex>
+                <v-flex sm2>
+                  <div class="content_center">Date</div>
+                </v-flex>
+                <v-flex sm1 align-self-center>
+                  <div class="content_center">Stage</div>
+                </v-flex>
+              </v-layout>
+            </v-card>
+          </v-flex>
+          <v-flex sm12>
+            <v-list
+              v-if="matchViews.length>0"
+              id="individual-list"
+              style="background-color: chocolate;"
+            >
+              <IndividualMatchCard
+                v-for="(mv,i) in matchViews"
+                :key="`#${i}-${mv.id.toString()}`"
+                :matchView="mv"
+              ></IndividualMatchCard>
+            </v-list>
+            <div v-else-if="isLoading == true" class="content_center" style="height:720px">
+              <v-progress-circular :size="70" indeterminate color="green"></v-progress-circular>
+            </div>
+            <div
+              v-else-if="hasAccount == false"
+              class="content_center"
+              style="font-size:30px;height:720px;color: white;"
+            >Please register an account in the menu</div>
+            <div
+              v-else
+              class="content_center"
+              style="font-size:30px;height:720px;color: white;"
+            >No More Matches</div>
+          </v-flex>
+          <v-flex align-self-center xs12 sm12>
+            <Pagination
+              :totalItems="count"
+              :page="page"
+              :itemsPerPage="page_size"
+              :maxVisiblePages="5"
+              @page-change="pageChanged"
+            ></Pagination>
+          </v-flex>
+        </v-layout>
+      </v-flex>
     </v-layout>
   </div>
 </template>
 <script lang="ts">
 import IndividualMatchCard from "@/components/IndividualMatchCard.vue";
+import Pagination from "@/components/Pagination.vue";
 import DB, { ZeroAddress } from "@/database";
 import { Vue, Component, Prop } from "vue-property-decorator";
 import { GlobalEvent, Events } from "@/GlobalEvent";
@@ -136,7 +139,8 @@ import {
 
 @Component({
   components: {
-    IndividualMatchCard
+    IndividualMatchCard,
+    Pagination
   }
 })
 export default class IndividualMatchList extends Vue {
@@ -146,6 +150,7 @@ export default class IndividualMatchList extends Vue {
   isLoading = true;
   selectedMatchStatus = 0;
   hasAccount = false;
+  count = 0;
 
   private async created() {
     try {
@@ -199,19 +204,6 @@ export default class IndividualMatchList extends Vue {
     GlobalEvent.$off(Events.AccountChanged);
   }
 
-  private async lastpage() {
-    this.page--;
-    if (this.page < 0) {
-      this.page = 0;
-    }
-    await this.loadMatchViews();
-  }
-
-  private async nextpage() {
-    this.page++;
-    await this.loadMatchViews();
-  }
-
   private async getMatchViews(status: number) {
     const main = await DB.getMainAccount();
     this.hasAccount = main.address !== ZeroAddress;
@@ -231,8 +223,9 @@ export default class IndividualMatchList extends Vue {
           (status == 0 ? "" : "&stage=" + status)
       );
       const data = await res.json();
+      this.count = data.count;
       console.log(data);
-      for (const match of data) {
+      for (const match of data.data) {
         matchViews.push({
           id: parseInt(match._id),
           oneLogo: HttpHost + match.leftLogo,
@@ -243,6 +236,12 @@ export default class IndividualMatchList extends Vue {
       console.log(err.message);
     }
     return matchViews;
+  }
+
+  async pageChanged(page: number) {
+    console.log(page);
+    this.page = page;
+    await this.loadMatchViews();
   }
 }
 </script>

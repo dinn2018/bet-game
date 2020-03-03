@@ -1,6 +1,8 @@
 import BigNumber from 'bignumber.js';
 
-export let HttpHost = 'https://legend.vebet.app';
+// export let HttpHost = 'https://legend.vebet.app';
+export let HttpHost = 'http://192.168.50.217:5000';
+
 export let unit = new BigNumber(1e18);
 export let zero = new BigNumber(0);
 export let contractAddr = '0x448e467e0828B03f17171732da5d549FeDcF05eb';
